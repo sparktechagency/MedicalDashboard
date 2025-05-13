@@ -48,7 +48,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               className={({ isActive }) =>
                 `px-2 py-2 flex items-center gap-3 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#48B1DB] text-white rounded-md border-r-4 border-white"
+                    ? "bg-gradient-to-r from-[#48B1DB] text-white rounded-md "
                     : "text-white"
                 }`
               }
@@ -61,7 +61,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               className={({ isActive }) =>
                 `px-2 py-2 flex items-center gap-3 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#5C78A3] text-white rounded-md border-r-4 border-white"
+                    ? "bg-gradient-to-r from-[#5C78A3] text-white rounded-md "
                     : "text-white"
                 }`
               }

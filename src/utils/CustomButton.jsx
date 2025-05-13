@@ -18,22 +18,22 @@ const CustomButton = ({
           type="default"
           htmlType="submit"
           loading={loading}
-          className="w-full bg-[#E4AE3C] px-5 py-2 flex justify-center items-center gap-5 text-white rounded-md border-none"
+          className="w-full bg-[#48B1DB] px-5 py-2 flex justify-center items-center gap-5 text-white rounded-md border-none"
           size="large"
           style={{
             display: "flex",
             alignItems: "center",
             gap: "10px",
-            backgroundColor: "#E4AE3C",
+            backgroundColor: "#48B1DB",
             color: "#ffffff", // Ensure text color stays white
           }}
           // Custom hover style to maintain background and text color
           onMouseEnter={(e) => {
-            e.target.style.backgroundColor = "#E4AE3C"; // Maintain the same background color on hover
+            e.target.style.backgroundColor = "#48B1DB"; // Maintain the same background color on hover
             e.target.style.color = "#ffffff"; // Maintain white text color on hover
           }}
           onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "#E4AE3C"; // Maintain the same background color when hover ends
+            e.target.style.backgroundColor = "#48B1DB"; // Maintain the same background color when hover ends
             e.target.style.color = "#ffffff"; // Maintain white text color when hover ends
           }}
         >

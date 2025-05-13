@@ -1,37 +1,35 @@
 /* eslint-disable react/no-unescaped-entities */
-import {  useNavigate } from "react-router-dom";
-import Logo from "../../../assets/auth/Logo.png";
+import forgetPasswordImage from "../../../assets/auth/forget.png";
+import { Link, useNavigate } from "react-router-dom";
+import { IoIosArrowBack } from "react-icons/io";
 import { Form } from "antd";
 import CustomInput from "../../../utils/CustomInput";
 import { HiOutlineMail } from "react-icons/hi";
 import CustomButton from "../../../utils/CustomButton";
 import { useForgotPasswordMutation } from "../../../redux/features/auth/authApi";
 import { toast } from "sonner";
+import LogoImage from "../../../assets/auth/Logo.png";
 import { useDispatch } from "react-redux";
 import { updateToken } from "../../../redux/features/auth/authSlice";
-import { useTranslation } from "react-i18next";
+
 
 const ForgetPassword = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const submit = async (values) => {
     try {
       const res = await forgotPassword(values);
-      console.log(res)
       if (res.error) {
         toast.error(res?.error?.data?.message);
-        // console.log(res.error);
+        console.log(res.error);
       }
       if (res.data) {
         toast.success(res.data.message);
-        // console.log(res.data?.data?.token)
-        dispatch(
-          updateToken({
-            token: res.data?.data?.token,
-          })
-        );
+        console.log(res?.data)
+    dispatch(updateToken({
+         token: res.data?.data?.attributes?.accessToken
+       }))
         navigate(`/auth/otp/${values?.email}`);
       }
     } catch (error) {
@@ -40,22 +38,33 @@ const ForgetPassword = () => {
   };
 
   return (
-    <div
-      className="w-full max-w-6xl mx-auto h-full md:h-screen grid grid-cols-1 md:grid-cols-2 place-content-center px-5 py-10 gap-8 bg-white bg-cover bg-center bg-no-repeat"
-    >
-      <div className="mt-16 bg-[#707070b2] rounded-md p-5 w-full md:w-[80%]">
-        <div className="mb-2">
-          <img
-            src={Logo}
-            alt="logo"
-            className="w-[80px] h-[80px] mb-5 rounded-md mx-auto"
-          />
-          <h1 className="font-semibold text-3xl text-white text-center">
-          Forgot Password
+    <div className="w-full max-w-6xl mx-auto h-full md:h-screen grid grid-cols-1 md:grid-cols-2 place-content-center px-5 py-10 gap-8 bg-white ">
+      <div>
+        <img
+          src={forgetPasswordImage}
+          className="w-full h-full mx-auto"
+          alt="Forgot Password Illustration"
+        />
+      </div>
+      <div className="mt-16">
+        <div className="mb-5 space-y-5">
+        <img
+          src={LogoImage}
+          className="w-[136px] h-[129px] mx-auto mb-3"
+          alt="Sign in illustration"
+        />
+          <h1 className="font-semibold text-2xl flex items-center gap-2">
+            <Link to="/auth">
+              <IoIosArrowBack />
+            </Link>
+            Forgot Password
           </h1>
-          <h1 className="text-gray-300 text-center">Please enter your email address to reset <br />
-          your password.</h1>
+          <h1>
+            Enter the email address associated with your account. We'll send you
+            an OTP to your email.
+          </h1>
         </div>
+
         {/* Ant Design Form */}
         <Form
           layout="vertical"
@@ -64,7 +73,7 @@ const ForgetPassword = () => {
         >
           {/* CustomInput wrapped in Form.Item for validation */}
           <Form.Item
-            label={<span className="text-white">Email</span>}
+            label="Email"
             name="email"
             rules={[
               {
@@ -88,7 +97,7 @@ const ForgetPassword = () => {
               type="submit"
               className="w-full"
             >
-              {t("Send OTP")}
+              Send OTP
             </CustomButton>
           </Form.Item>
         </Form>
