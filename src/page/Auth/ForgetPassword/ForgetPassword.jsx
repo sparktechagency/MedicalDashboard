@@ -39,7 +39,7 @@ const ForgetPassword = () => {
 
   return (
     <div className="w-full max-w-6xl mx-auto h-full md:h-screen grid grid-cols-1 md:grid-cols-2 place-content-center px-5 py-10 gap-8 bg-white ">
-      <div>
+      <div className="hidden md:block">
         <img
           src={forgetPasswordImage}
           className="w-full h-full mx-auto"
