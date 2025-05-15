@@ -33,7 +33,7 @@ const PersonalInformation = () => {
       </div>
 
       {/* Profile Information */}
-      <div className="w-full md:w-[95%] lg:w-[50%] py-5 px-14 rounded-md bg-[#FBF6EE] h-full md:mt-1  mx-auto">
+      <div className="w-full md:w-[95%] lg:w-[50%] py-5 px-14 rounded-md bg-[#E5F6FD] h-full md:mt-1  mx-auto">
         {/* Profile Picture */}
         <div className="rounded-lg flex justify-center items-center flex-col ">
           {isFetching ? (
@@ -91,7 +91,7 @@ const PersonalInformation = () => {
           </div>
           <div className="flex justify-center">
             <Link to="/edit-personal-info">
-              <button className="px-8 py-3 bg-[#E4AE3C] text-white rounded-lg">
+              <button className="px-8 py-3 bg-[#48B1DB] text-white rounded-lg">
                 {t("Edit Profile")}
               </button>
             </Link>

@@ -100,7 +100,7 @@ const EditInformation = () => {
         </div>
       </div>
       {/* Profile Information */}
-      <div className="w-full md:w-[95%] lg:w-[50%] p-7 px-14 rounded-md bg-[#FBF6EE] h-full md:mt-1  mx-auto mb-5">
+      <div className="w-full md:w-[95%] lg:w-[50%] p-7 px-14 rounded-md bg-[#E5F6FD] h-full md:mt-1  mx-auto mb-5">
         {/* Profile Picture */}
         <div className="flex justify-center">
           <div onClick={handleDivClick} className="cursor-pointer">
