@@ -18,7 +18,7 @@ const Header = ({ toggleSidebar }) => {
     i18n.changeLanguage(lng);
   };
   return (
-    <div className=" w-full md:h-[80px] px-3  md:flex justify-between items-center  text-white sticky top-0 left-0 z-10 bg-[#48B1DB]">
+    <div className=" w-full md:h-[80px] px-3 py-2  flex justify-between items-center  text-white sticky top-0 left-0 z-10 bg-[#48B1DB]">
       <div className="flex items-center gap-3 py-1 px-3 md:w-8/12 rounded">
         {/* Hamburger menu for mobile */}
         <button

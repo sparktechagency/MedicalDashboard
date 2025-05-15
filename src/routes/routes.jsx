@@ -17,6 +17,12 @@ import EditTermsConditions from "../page/EditTermsConditions/EditTermsConditions
 import EditAboutUs from "../page/EditAboutUs/EditAboutUs";
 import UserManagementPage from "../page/UserManagement/UserManagementPage";
 import AdminRoutes from "./AdminRoutes";
+import VendorRequest from "../page/VendorRequest/VendorRequest";
+import VendorDetailsPage from "../page/VendorRequestsDetailsPage/VendorRequestsDetailsPage";
+import UserDetailsPage from "../page/UserDetailsPage/UserDetailsPage";
+import VendorlistPage from "../page/VendorlistPage/VendorlistPage";
+import VendorlistDetailsPage from "../page/VendorlistDetailsPage/VendorlistDetailsPage";
+import EarningsPage from "../page/EarningsPage/EarningsPage";
 
 
 const router = createBrowserRouter([
@@ -38,12 +44,36 @@ const router = createBrowserRouter([
         element: <UserManagementPage />,
       },
       {
+        path: "/users/:id",
+        element: <UserDetailsPage />,
+      },
+      {
         path: "personal-info",
         element: <PersonalInformationPage />,
       },
       {
         path: "edit-personal-info",
         element: <EditPersonalInformationPage />,
+      },
+      {
+        path: "vendorRequest",
+        element: <VendorRequest />,
+      },
+      {
+        path: "Vendorlist",
+        element: <VendorlistPage />,
+      },
+      {
+        path: "Vendorlist/:id",
+        element: <VendorlistDetailsPage />,
+      },
+      {
+        path: "vendorRequest/:id",
+        element: <VendorDetailsPage />,
+      },
+      {
+        path: "Earnings",
+        element: <EarningsPage />,
       },
       {
         path: "/notification",

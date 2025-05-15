@@ -3,17 +3,15 @@
 import { IoIosLogOut } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { FiAlignJustify, FiDatabase } from "react-icons/fi";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../../redux/features/auth/authSlice";
 import LogoImage from "../../../assets/auth/Logo.png";
 import { useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
-import { useTranslation } from "react-i18next";
-import { MdOutlineAdsClick } from "react-icons/md";
 import { TbMessageReport } from "react-icons/tb";
-import { MdOutlineReportProblem } from "react-icons/md";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { FaUsersBetweenLines,  FaUsersRectangle } from "react-icons/fa6";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const navigate = useNavigate();
@@ -24,8 +22,6 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     dispatch(logoutUser());
     navigate("/auth");
   };
-
-  const { t } = useTranslation();
 
   return (
     <div>
@@ -48,66 +44,92 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               className={({ isActive }) =>
                 `px-2 py-2 flex items-center gap-3 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#48B1DB] text-white rounded-md "
-                    : "text-white"
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
                 }`
               }
             >
               <LuLayoutDashboard className="size-8" />
-              <span>{t("Dashboard")}</span>
+              <span>Dashboard</span>
+            </NavLink>
+            <NavLink
+              to="/vendorRequest"
+              className={({ isActive }) =>
+                `px-2 py-2 flex items-center gap-3 ${
+                  isActive
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
+                }`
+              }
+            >
+              <FaUsersRectangle className="size-8" />
+              <span>Vendor Request</span>
             </NavLink>
             <NavLink
               to="/users"
               className={({ isActive }) =>
                 `px-2 py-2 flex items-center gap-3 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#5C78A3] text-white rounded-md "
-                    : "text-white"
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
                 }`
               }
             >
               <FaRegUserCircle className="size-8" />
-              <span>{t("Users")}</span>
+              <span>Users</span>
             </NavLink>
 
             <NavLink
-              to="/ContentModeration"
+              to="/Vendorlist"
               className={({ isActive }) =>
                 `px-2 py-2 flex items-center gap-3 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#5C78A3] text-white rounded-md border-r-4 border-white"
-                    : "text-white"
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
                 }`
               }
             >
-              <MdOutlineReportProblem className="size-8" />
-              <span>Content Moderation</span>
+              <FaUsersBetweenLines className="size-8" />
+              <span>Vendor list</span>
             </NavLink>
             <NavLink
-              to="/Subscribers"
+              to="/Earnings"
               className={({ isActive }) =>
                 `px-2 py-2 flex items-center gap-3 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#5C78A3] text-white rounded-md border-r-4 border-white"
-                    : "text-white"
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
+                }`
+              }
+            >
+              <RiMoneyDollarCircleLine className="size-8" />
+              <span>Earnings</span>
+            </NavLink>
+            <NavLink
+              to="/Reports"
+              className={({ isActive }) =>
+                `px-2 py-2 flex items-center gap-3 ${
+                  isActive
+                    ? "bg-[#48B1DB] text-white rounded-md  "
+                    : "text-black"
                 }`
               }
             >
               <TbMessageReport className="size-8" />
-              <span>Subscribers</span>
+              <span>Reports</span>
             </NavLink>
             <NavLink
               to="/settings"
               className={({ isActive }) =>
                 `px-2 py-2 flex items-center gap-3 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#5C78A3] text-white rounded-md border-r-4 border-white"
-                    : "text-white"
+                    ? "bg-[#48B1DB] text-white rounded-md border-r-4 border-white"
+                    : "text-black"
                 }`
               }
             >
               <IoSettingsOutline className="size-8" />
-              <span>{t("Settings")}</span>
+              <span>Settings</span>
             </NavLink>
           </ul>
 
@@ -117,7 +139,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             className="flex items-center gap-2 px-10 py-4 text-red-500 mb-5 ml-10"
           >
             <IoIosLogOut className="size-8" />
-            <span>{t("Logout")}</span>
+            <span>Logout</span>
           </button>
         </div>
       </div>
@@ -139,13 +161,13 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               className={({ isActive }) =>
                 `px-4 py-3 flex items-center gap-4 rounded-lg transition-colors duration-200 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#5C78A3] text-white border-l-4 border-white"
+                    ? "bg-[#48B1DB] text-white border-l-4 border-white"
                     : "text-white "
                 }`
               }
             >
               <LuLayoutDashboard className="text-lg" />
-              <span className="text-base">{t("Dashboard")}</span>
+              <span className="text-base">Dashboard</span>
             </NavLink>
 
             {/* User Management Link */}
@@ -154,13 +176,13 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               className={({ isActive }) =>
                 `px-4 py-3 flex items-center gap-4 rounded-lg transition-colors duration-200 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#5C78A3] text-white border-l-4 border-white"
+                    ? "bg-[#48B1DB] text-white border-l-4 border-white"
                     : "text-white "
                 }`
               }
             >
               <FaRegUserCircle className="text-lg" />
-              <span className="text-base">{t("User Management")}</span>
+              <span className="text-base">User Management</span>
             </NavLink>
 
             {/* Settings Link */}
@@ -175,7 +197,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               }
             >
               <IoSettingsOutline className="text-lg" />
-              <span className="text-base">{t("Settings")}</span>
+              <span className="text-base">Settings</span>
             </NavLink>
           </ul>
 
@@ -185,7 +207,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             className="flex items-center gap-3 px-8 py-4 text-red-500 mt-5 mb-5 hover:bg-[#2c3e50] rounded-lg transition-all duration-200"
           >
             <IoIosLogOut className="text-xl" />
-            <span className="text-base">{t("Logout")}</span>
+            <span className="text-base">Logout</span>
           </button>
         </div>
       </div>

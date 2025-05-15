@@ -14,7 +14,7 @@
     "@ant-design/plots": "^2.3.3",
     "@hookform/resolvers": "^3.10.0",
     "@reduxjs/toolkit": "^2.5.0",
-    "antd": "^5.23.2",
+    "antd": "^5.25.1",
     "chart.js": "^4.4.7",
     "i18next": "^24.2.1",
     "jodit-react": "^5.0.10",
