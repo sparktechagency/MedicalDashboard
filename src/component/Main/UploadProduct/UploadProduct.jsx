@@ -102,7 +102,7 @@ const UploadProduct = () => {
       <br />
 
       <div className="flex justify-end -mb-10 space-x-2">
-        <a href="">
+        <a href="/AllCategory">
             <button className="bg-[#48B1DB] text-white py-2 px-4 rounded-md">
             All Category
           </button>

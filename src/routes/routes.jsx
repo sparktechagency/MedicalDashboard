@@ -29,14 +29,15 @@ import EditUserAgreement from "../page/EditUserAgreement/EditUserAgreement";
 import UploadProductPage from "../page/UploadProductPage/UploadProductPage";
 import AllProductsPage from "../page/AllProductsPage/AllProductsPage";
 import EidtProductsPage from "../page/EidtProductsPage/EidtProductsPage";
-
+import EditUploadCategoryPage from "../page/EditUploadCategoryPage/EditUploadCategoryPage";
+import AllCategoryPage from "../page/AllCategoryPage/AllCategoryPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       // <AdminRoutes>
-        <MainLayout />
+      <MainLayout />
       // </AdminRoutes>
     ),
     errorElement: <h1>Error</h1>,
@@ -85,10 +86,18 @@ const router = createBrowserRouter([
         path: "AllProducts/:id",
         element: <EidtProductsPage />,
       },
-       {
-         path: "AllProducts",
-         element: <AllProductsPage />,
-       },
+      {
+        path: "AllProducts",
+        element: <AllProductsPage />,
+      },
+      {
+        path: "AllCategory",
+        element: <AllCategoryPage />,
+      },
+      {
+        path: "AllCategory/:id",
+        element: <EditUploadCategoryPage />,
+      },
       {
         path: "Earnings",
         element: <EarningsPage />,
