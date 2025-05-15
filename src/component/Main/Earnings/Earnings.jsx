@@ -106,8 +106,8 @@ const Earnings = () => {
 
   return (
     <div className="w-full col-span-full md:col-span-6 rounded-lg">
-      <h2 className="font-semibold py-3 text-[20px]">Earnings</h2>
-      <div className="bg-[#EEF9FE]">
+      <h2 className="font-semibold py-1 text-[20px]">Earnings</h2>
+      <div className="">
         <ConfigProvider
           theme={{
             token: {
@@ -128,7 +128,7 @@ const Earnings = () => {
             dataSource={dataSource}
             pagination={{
               pageSize: 10,
-              position: ["bottomCenter"],
+              position: ["bottomRight"],
             }}
             scroll={{ x: 1000 }}
           />

@@ -7,6 +7,6 @@ export default defineConfig({
   server: {
     allowedHosts: ["admin.wokedatingsite.com", "admin.wokedatingsite.com"],
     host: "0.0.0.0",
-    port: 5173,
+    port: 8080,
   },
 });

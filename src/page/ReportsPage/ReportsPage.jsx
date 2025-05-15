@@ -1,5 +1,9 @@
+import Reports from "../../component/Main/Reports/Reports";
+
 const ReportsPage = () => {
-    return <div>ReportsPage</div>
+    return <div>
+        <Reports/>
+    </div>
 };
 
 export default ReportsPage

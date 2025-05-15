@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import { IoIosLogOut } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
-import { LuLayoutDashboard } from "react-icons/lu";
+import { LuLayoutDashboard, LuPackageOpen } from "react-icons/lu";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../../redux/features/auth/authSlice";
@@ -11,7 +11,7 @@ import { useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { TbMessageReport } from "react-icons/tb";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
-import { FaUsersBetweenLines,  FaUsersRectangle } from "react-icons/fa6";
+import { FaUsersBetweenLines, FaUsersRectangle } from "react-icons/fa6";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const navigate = useNavigate();
@@ -39,6 +39,135 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
 
         <div className="flex flex-col flex-grow justify-between">
           <ul className="w-[70%] mx-auto flex flex-col gap-3">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `px-2 py-2 flex items-center gap-3 ${
+                  isActive
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
+                }`
+              }
+            >
+              <LuLayoutDashboard className="size-8" />
+              <span>Dashboard</span>
+            </NavLink>
+            <NavLink
+              to="/vendorRequest"
+              className={({ isActive }) =>
+                `px-2 py-2 flex items-center gap-3 ${
+                  isActive
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
+                }`
+              }
+            >
+              <FaUsersRectangle className="size-8" />
+              <span>Vendor Request</span>
+            </NavLink>
+            <NavLink
+              to="/UploadProduct"
+              className={({ isActive }) =>
+                `px-2 py-2 flex items-center gap-3 ${
+                  isActive
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
+                }`
+              }
+            >
+              <LuPackageOpen className="size-8" />
+              <span>Upload Product</span>
+            </NavLink>
+            <NavLink
+              to="/users"
+              className={({ isActive }) =>
+                `px-2 py-2 flex items-center gap-3 ${
+                  isActive
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
+                }`
+              }
+            >
+              <FaRegUserCircle className="size-8" />
+              <span>Users</span>
+            </NavLink>
+
+            <NavLink
+              to="/Vendorlist"
+              className={({ isActive }) =>
+                `px-2 py-2 flex items-center gap-3 ${
+                  isActive
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
+                }`
+              }
+            >
+              <FaUsersBetweenLines className="size-8" />
+              <span>Vendor list</span>
+            </NavLink>
+            <NavLink
+              to="/Earnings"
+              className={({ isActive }) =>
+                `px-2 py-2 flex items-center gap-3 ${
+                  isActive
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
+                }`
+              }
+            >
+              <RiMoneyDollarCircleLine className="size-8" />
+              <span>Earnings</span>
+            </NavLink>
+            <NavLink
+              to="/Reports"
+              className={({ isActive }) =>
+                `px-2 py-2 flex items-center gap-3 ${
+                  isActive
+                    ? "bg-[#48B1DB] text-white rounded-md  "
+                    : "text-black"
+                }`
+              }
+            >
+              <TbMessageReport className="size-8" />
+              <span>Reports</span>
+            </NavLink>
+            <NavLink
+              to="/settings"
+              className={({ isActive }) =>
+                `px-2 py-2 flex items-center gap-3 ${
+                  isActive
+                    ? "bg-[#48B1DB] text-white rounded-md "
+                    : "text-black"
+                }`
+              }
+            >
+              <IoSettingsOutline className="size-8" />
+              <span>Settings</span>
+            </NavLink>
+          </ul>
+
+          {/* Logout Button */}
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-2 px-7 py-4 text-red-500 mb-5 ml-7"
+          >
+            <IoIosLogOut className="size-8" />
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Sidebar */}
+      <div
+        className={`fixed top-0 left-0 z-40 w-64 h-full bg-gradient-to-b from-[#F5F9FA] to-[#48b1dbd3] shadow-lg flex flex-col justify-between transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out md:hidden`}
+      >
+        <div className="flex justify-center mt-5">
+          <img src={LogoImage} alt="logo" className="w-46 h-24" />
+        </div>
+        <div className="flex flex-col flex-grow justify-between">
+          <ul className="w-[80%] mx-auto flex flex-col gap-4 md:w-full md:mx-0">
             <NavLink
               to="/"
               className={({ isActive }) =>
@@ -130,74 +259,6 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             >
               <IoSettingsOutline className="size-8" />
               <span>Settings</span>
-            </NavLink>
-          </ul>
-
-          {/* Logout Button */}
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 px-10 py-4 text-red-500 mb-5 ml-10"
-          >
-            <IoIosLogOut className="size-8" />
-            <span>Logout</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Sidebar */}
-      <div
-        className={`fixed top-0 left-0 z-40 w-64 h-full bg-[#202020] shadow-lg flex flex-col justify-between transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out md:hidden`}
-      >
-        <div className="flex justify-center mt-5">
-          <img src={LogoImage} alt="logo" className="w-46 h-24" />
-        </div>
-        <div className="flex flex-col flex-grow justify-between">
-          <ul className="w-[80%] mx-auto flex flex-col gap-4 md:w-full md:mx-0">
-            {/* Dashboard Link */}
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `px-4 py-3 flex items-center gap-4 rounded-lg transition-colors duration-200 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white border-l-4 border-white"
-                    : "text-white "
-                }`
-              }
-            >
-              <LuLayoutDashboard className="text-lg" />
-              <span className="text-base">Dashboard</span>
-            </NavLink>
-
-            {/* User Management Link */}
-            <NavLink
-              to="/users"
-              className={({ isActive }) =>
-                `px-4 py-3 flex items-center gap-4 rounded-lg transition-colors duration-200 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white border-l-4 border-white"
-                    : "text-white "
-                }`
-              }
-            >
-              <FaRegUserCircle className="text-lg" />
-              <span className="text-base">User Management</span>
-            </NavLink>
-
-            {/* Settings Link */}
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                `px-4 py-3 flex items-center gap-4 rounded-lg transition-colors duration-200 ${
-                  isActive
-                    ? "bg-gradient-to-r from-[#5C78A3] text-white border-l-4 border-white"
-                    : "text-white"
-                }`
-              }
-            >
-              <IoSettingsOutline className="text-lg" />
-              <span className="text-base">Settings</span>
             </NavLink>
           </ul>
 

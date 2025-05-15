@@ -63,7 +63,7 @@ const EditTermsConditions = () => {
       </div>
 
       {/* Form Section */}
-      <div className="w-full p-6 rounded-lg shadow-md bg-[#E8EBF0]">
+      <div className="w-full p-6 rounded-lg shadow-md bg-[#E5F6FD]">
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           {/* React Quill for Terms and Conditions Content */}
           <Form.Item name="content" initialValue={content}>

@@ -23,6 +23,12 @@ import UserDetailsPage from "../page/UserDetailsPage/UserDetailsPage";
 import VendorlistPage from "../page/VendorlistPage/VendorlistPage";
 import VendorlistDetailsPage from "../page/VendorlistDetailsPage/VendorlistDetailsPage";
 import EarningsPage from "../page/EarningsPage/EarningsPage";
+import ReportsPage from "../page/ReportsPage/ReportsPage";
+import UserAgreement from "../page/UserAgreement/UserAgreement";
+import EditUserAgreement from "../page/EditUserAgreement/EditUserAgreement";
+import UploadProductPage from "../page/UploadProductPage/UploadProductPage";
+import AllProductsPage from "../page/AllProductsPage/AllProductsPage";
+import EidtProductsPage from "../page/EidtProductsPage/EidtProductsPage";
 
 
 const router = createBrowserRouter([
@@ -72,8 +78,24 @@ const router = createBrowserRouter([
         element: <VendorDetailsPage />,
       },
       {
+        path: "UploadProduct",
+        element: <UploadProductPage />,
+      },
+      {
+        path: "AllProducts/:id",
+        element: <EidtProductsPage />,
+      },
+       {
+         path: "AllProducts",
+         element: <AllProductsPage />,
+       },
+      {
         path: "Earnings",
         element: <EarningsPage />,
+      },
+      {
+        path: "Reports",
+        element: <ReportsPage />,
       },
       {
         path: "/notification",
@@ -82,6 +104,14 @@ const router = createBrowserRouter([
       {
         path: "settings",
         element: <SettingsPage />,
+      },
+      {
+        path: "/settings/UserAgreement",
+        element: <UserAgreement />,
+      },
+      {
+        path: "/settings/UserAgreement/:id",
+        element: <EditUserAgreement />,
       },
       {
         path: "settings/privacy-policy",

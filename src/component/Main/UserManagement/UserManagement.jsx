@@ -161,7 +161,8 @@ const UserManagement = () => {
         />
       </div>
 
-      {/* User Table */}
+     <div>
+       {/* User Table */}
       <ConfigProvider
         theme={{
           token: {
@@ -186,6 +187,7 @@ const UserManagement = () => {
           scroll={{ x: 1000 }}
         />
       </ConfigProvider>
+     </div>
     </div>
   );
 };

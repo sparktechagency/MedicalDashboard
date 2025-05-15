@@ -62,7 +62,7 @@ const plainText = content.replace(/<[^>]*>/g, "").trim(); // Remove HTML tags an
       </div>
 
       {/* Form Section */}
-      <div className="w-full p-6 rounded-lg shadow-md bg-[#E8EBF0]">
+      <div className="w-full p-6 rounded-lg shadow-md bg-[#E5F6FD]">
         {content && (
           <Form form={form} layout="vertical" onFinish={handleSubmit}>
             <Form.Item name="content" initialValue={content}>

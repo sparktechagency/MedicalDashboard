@@ -129,6 +129,10 @@ const Settings = () => {
       path: "terms-conditions",
     },
     {
+      title: `${t("User Agreement")}`,
+      path: "UserAgreement",
+    },
+    {
       title: `${t("About us")}`,
       path: "about-us",
     },
@@ -139,7 +143,7 @@ const Settings = () => {
       {settingsItem.map((setting, index) => (
         <div
           key={index}
-          className="w-full p-4 mb-2 text-sm rounded-lg bg-[#FBF6EE]  flex items-center justify-between cursor-pointer"
+          className="w-full p-4 mb-2 text-sm rounded-lg bg-[#E5F6FD]  flex items-center justify-between cursor-pointer"
           onClick={() => handleNavigate(setting.path)}
         >
           <h2 className="font-semibold">{setting.title}</h2>
@@ -248,17 +252,17 @@ const Settings = () => {
                   className="w-full px-3 py-2"
                 />
               </Form.Item>
-              {/* <p className=" text-secondary font-medium">
+              <p className=" text-secondary font-medium">
                 <button onClick={() => setModelTitle("Forget password")}>
-                  <h1 className="underline text-[#E4AE3C]">
+                  <h1 className="underline text-[#48B1DB]">
                     {t("Forget Password")}
                   </h1>
                 </button>
-              </p> */}
+              </p>
               <Form.Item>
                 <button
                   type="submit"
-                  className="w-full px-5 py-4  mt-2 text-white bg-[#E4AE3C] rounded-lg"
+                  className="w-full px-5 py-4  mt-2 text-white bg-[#48B1DB] rounded-lg"
                 >
                   {changePasswordLoading ? (
                     <h1 className="flex justify-center items-center gap-1">
@@ -304,7 +308,7 @@ const Settings = () => {
               <Form.Item>
                 <button
                   type="submit"
-                  className="w-full px-5 py-4  mt-2 text-white bg-[#E4AE3C] rounded-lg"
+                  className="w-full px-5 py-4  mt-2 text-white bg-[#48B1DB] rounded-lg"
                 >
                   {forgotPasswordLoading ? (
                     <h1 className="flex justify-center items-center gap-1">
@@ -355,7 +359,7 @@ const Settings = () => {
                   size: "18px",
                   height: "56px",
                 }}
-                className="bg-secondary
+                className="bg-[#48B1DB]
                 w-full
                 text-white mt-5 py-3 rounded-lg duration-200"
               >
@@ -460,7 +464,7 @@ const Settings = () => {
                     height: "56px",
                   }}
                   htmlType="submit"
-                  className="block w-full h-[56px] px-2 py-4 mt-2 text-white bg-secondary rounded-lg"
+                  className="block w-full h-[56px] px-2 py-4 mt-2 text-white bg-[#48B1DB] rounded-lg"
                 >
                   {resetPassLoading ? (
                     <h1 className="flex justify-center items-center gap-1">
