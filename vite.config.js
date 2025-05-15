@@ -5,7 +5,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: ["admin.wokedatingsite.com", "admin.wokedatingsite.com"],
+    allowedHosts: ["maniknew8080.sobhoy.com", "maniknew8080.sobhoy.com"],
     host: "0.0.0.0",
     port: 8080,
   },

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaImage, FaTimes } from "react-icons/fa";
 import Status from "../Dashboard/Status";
+import UploadCategory from "../UploadCategory/UploadCategory";
 
 const MAX_IMAGES = 5;
 const MAX_SIZE_MB = 5;
@@ -113,7 +114,7 @@ const UploadProduct = () => {
         </a>
       </div>
 
-      
+      <UploadCategory />
 
       <div className="max-w-7xl bg-[#E6F1F8] p-8 rounded-lg shadow-lg">
         <div className="flex justify-between items-center">
