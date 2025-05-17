@@ -199,17 +199,17 @@ const UploadProduct = () => {
 
             {/* Product Bid Hour Time */}
             <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Bid Hour Time</label>
+              <label className="text-gray-600">Product Bid  Time</label>
               <input
                 type="number"
                 value={productBidHour}
                 onChange={(e) => setProductBidHour(e.target.value)}
                 className="border border-[#48B1DB] p-3 rounded-md"
-                placeholder="Hour"
+                placeholder="time"
               />
             </div>
 
-            {/* Product Bid Minute Time */}
+            {/* Product Bid Minute Time
             <div className="flex flex-col my-2">
               <label className="text-gray-600">Product Bid Minute Time</label>
               <input
@@ -219,10 +219,10 @@ const UploadProduct = () => {
                 className="border border-[#48B1DB] p-3 rounded-md"
                 placeholder="Minute"
               />
-            </div>
+            </div> */}
 
             {/* Product Bid Second Time */}
-            <div className="flex flex-col my-2">
+            {/* <div className="flex flex-col my-2">
               <label className="text-gray-600">Product Bid Second Time</label>
               <input
                 type="number"
@@ -231,7 +231,7 @@ const UploadProduct = () => {
                 className="border border-[#48B1DB] p-3 rounded-md"
                 placeholder="Second"
               />
-            </div>
+            </div> */}
 
             {/* Product Image Upload */}
             <div className="flex flex-col mt-6">

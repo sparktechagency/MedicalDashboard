@@ -15,7 +15,7 @@ const MainLayout = () => {
       {/* Main Content */}
       <section className="w-full h-full md:ml-[320px] px-2 md:px-0">
         <Header toggleSidebar={toggleSidebar} />
-        <div className="p-5">
+        <div className="py-5 md:px-5">
           <Outlet />
         </div>
       </section>

@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Modal, Space, Table, ConfigProvider } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { FaEye } from "react-icons/fa";
 
 const Earnings = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -95,7 +95,7 @@ const Earnings = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <InfoCircleOutlined
+          <FaEye 
             onClick={() => showModal(record)}
             style={{ fontSize: "18px", cursor: "pointer" }}
           />

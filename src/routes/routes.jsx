@@ -31,6 +31,7 @@ import AllProductsPage from "../page/AllProductsPage/AllProductsPage";
 import EidtProductsPage from "../page/EidtProductsPage/EidtProductsPage";
 import EditUploadCategoryPage from "../page/EditUploadCategoryPage/EditUploadCategoryPage";
 import AllCategoryPage from "../page/AllCategoryPage/AllCategoryPage";
+import MessagePage from "../page/MessagePage/MessagePage";
 
 const router = createBrowserRouter([
   {
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
       {
         path: "AllCategory/:id",
         element: <EditUploadCategoryPage />,
+      },
+      {
+        path: "Message",
+        element: <MessagePage />,
       },
       {
         path: "Earnings",

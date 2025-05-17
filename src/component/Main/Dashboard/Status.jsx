@@ -15,11 +15,12 @@ const Alldata = [
   { title: "Total Sold", value: data.recentUserData.length },
   { title: "Total Revenue", value: data.recentUserData.length },
   { title: "Active Product", value: data.recentUserData.length },
+  { title: "Granted Balance", value: data.recentUserData.length },
 ];
 
 const Status = () => {
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7">
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-5 gap-7">
       {Alldata.map((item, idx) => (
         <div
           key={idx}

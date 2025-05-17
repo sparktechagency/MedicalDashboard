@@ -78,7 +78,7 @@ const VendorRequest = () => {
     <div className="w-full mx-auto px-2  py-6 md:py-2">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 md:gap-6 lg:gap-8">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
-          Vendor Request List
+           Product  Request List
         </h1>
         <div className="flex items-center bg-blue-100 p-2 rounded w-full sm:w-auto max-w-xs lg:max-w-xs">
           <label htmlFor="filter" className="mr-2 text-sm lg:text-base">
@@ -154,10 +154,10 @@ const VendorRequest = () => {
                     <h1 className="font-medium">Time</h1>
                     <span className="text-gray-500">{record.time}</span>
                   </div>
-                  <div className="text-sm sm:text-base md:text-sm lg:text-lg lg:text-center">
+                  {/* <div className="text-sm sm:text-base md:text-sm lg:text-lg lg:text-center">
                     <h1 className="font-medium">Product</h1>
                     <span className="text-gray-500">{record.productList}</span>
-                  </div>
+                  </div> */}
                   <Link to={`/VendorRequest/${record.id}`}>
                     <Button
                       type="primary"

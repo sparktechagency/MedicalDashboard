@@ -11,7 +11,7 @@ import { useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { TbMessageReport } from "react-icons/tb";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
-import { FaUsersBetweenLines, FaUsersRectangle } from "react-icons/fa6";
+import { FaRegMessage, FaUsersBetweenLines, FaUsersRectangle } from "react-icons/fa6";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const navigate = useNavigate();
@@ -23,130 +23,47 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     navigate("/auth");
   };
 
+  const navItems = [
+    { path: "/", label: "Dashboard", icon: <LuLayoutDashboard className="size-8" /> },
+    { path: "/vendorRequest", label: "Product Request", icon: <FaUsersRectangle className="size-8" /> },
+    { path: "/UploadProduct", label: "Upload Product", icon: <LuPackageOpen className="size-8" /> },
+    { path: "/users", label: "Users", icon: <FaRegUserCircle className="size-8" /> },
+    { path: "/Vendorlist", label: "Seller", icon: <FaUsersBetweenLines className="size-8" /> },
+    { path: "/Earnings", label: "Earnings", icon: <RiMoneyDollarCircleLine className="size-8" /> },
+    { path: "/Reports", label: "Reports", icon: <TbMessageReport className="size-8" /> },
+    { path: "/Message", label: "Message", icon: <FaRegMessage  className="size-7" /> },
+    { path: "/settings", label: "Settings", icon: <IoSettingsOutline className="size-8" /> },
+  ];
+
+  const renderLinks = () =>
+    navItems.map(({ path, label, icon }) => (
+      <NavLink
+        to={path}
+        key={path}
+        onClick={() => {
+          if (isSidebarOpen) toggleSidebar(); // Close sidebar on mobile
+        }}
+        className={({ isActive }) =>
+          `px-2 py-2 flex items-center gap-3 rounded-md transition-all ${
+            isActive ? "bg-[#48B1DB] text-white" : "text-black"
+          }`
+        }
+      >
+        {icon}
+        <span>{label}</span>
+      </NavLink>
+    ));
+
   return (
-    <div>
+    <>
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex flex-col w-[320px] h-screen bg-gradient-to-b from-[#F5F9FA] to-[#48b1dbd3] fixed ">
-        <div className="w-full  flex justify-center items-center pt-5 ">
-          <img
-            src={LogoImage}
-            alt="logo"
-            className="w-[148px] h-[148px]  rounded-md"
-          />
+      <div className="hidden md:flex flex-col w-[320px] h-screen bg-gradient-to-b from-[#F5F9FA] to-[#48b1dbd3] fixed">
+        <div className="flex justify-center items-center pt-5">
+          <img src={LogoImage} alt="logo" className="w-[148px] h-[148px] rounded-md" />
         </div>
-
         <div className="border border-[#91C5DF] my-7"></div>
-
         <div className="flex flex-col flex-grow justify-between">
-          <ul className="w-[70%] mx-auto flex flex-col gap-3">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <LuLayoutDashboard className="size-8" />
-              <span>Dashboard</span>
-            </NavLink>
-            <NavLink
-              to="/vendorRequest"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <FaUsersRectangle className="size-8" />
-              <span>Vendor Request</span>
-            </NavLink>
-            <NavLink
-              to="/UploadProduct"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <LuPackageOpen className="size-8" />
-              <span>Upload Product</span>
-            </NavLink>
-            <NavLink
-              to="/users"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <FaRegUserCircle className="size-8" />
-              <span>Users</span>
-            </NavLink>
-
-            <NavLink
-              to="/Vendorlist"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <FaUsersBetweenLines className="size-8" />
-              <span>Vendor list</span>
-            </NavLink>
-            <NavLink
-              to="/Earnings"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <RiMoneyDollarCircleLine className="size-8" />
-              <span>Earnings</span>
-            </NavLink>
-            <NavLink
-              to="/Reports"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md  "
-                    : "text-black"
-                }`
-              }
-            >
-              <TbMessageReport className="size-8" />
-              <span>Reports</span>
-            </NavLink>
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <IoSettingsOutline className="size-8" />
-              <span>Settings</span>
-            </NavLink>
-          </ul>
-
-          {/* Logout Button */}
+          <ul className="w-[70%] mx-auto flex flex-col gap-3">{renderLinks()}</ul>
           <button
             onClick={() => setShowModal(true)}
             className="flex items-center gap-2 px-7 py-4 text-red-500 mb-5 ml-7"
@@ -167,102 +84,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           <img src={LogoImage} alt="logo" className="w-46 h-24" />
         </div>
         <div className="flex flex-col flex-grow justify-between">
-          <ul className="w-[80%] mx-auto flex flex-col gap-4 md:w-full md:mx-0">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <LuLayoutDashboard className="size-8" />
-              <span>Dashboard</span>
-            </NavLink>
-            <NavLink
-              to="/vendorRequest"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <FaUsersRectangle className="size-8" />
-              <span>Vendor Request</span>
-            </NavLink>
-            <NavLink
-              to="/users"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <FaRegUserCircle className="size-8" />
-              <span>Users</span>
-            </NavLink>
-
-            <NavLink
-              to="/Vendorlist"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <FaUsersBetweenLines className="size-8" />
-              <span>Vendor list</span>
-            </NavLink>
-            <NavLink
-              to="/Earnings"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md "
-                    : "text-black"
-                }`
-              }
-            >
-              <RiMoneyDollarCircleLine className="size-8" />
-              <span>Earnings</span>
-            </NavLink>
-            <NavLink
-              to="/Reports"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md  "
-                    : "text-black"
-                }`
-              }
-            >
-              <TbMessageReport className="size-8" />
-              <span>Reports</span>
-            </NavLink>
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                `px-2 py-2 flex items-center gap-3 ${
-                  isActive
-                    ? "bg-[#48B1DB] text-white rounded-md border-r-4 border-white"
-                    : "text-black"
-                }`
-              }
-            >
-              <IoSettingsOutline className="size-8" />
-              <span>Settings</span>
-            </NavLink>
-          </ul>
-
-          {/* Logout Button */}
+          <ul className="w-[80%] mx-auto flex flex-col gap-4">{renderLinks()}</ul>
           <button
             onClick={() => setShowModal(true)}
             className="flex items-center gap-3 px-8 py-4 text-red-500 mt-5 mb-5 hover:bg-[#2c3e50] rounded-lg transition-all duration-200"
@@ -273,31 +95,32 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         </div>
       </div>
 
-      {/* Logout Confirmation Modal */}
+      {/* Logout Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded shadow-lg w-80">
-            <h3 className="text-lg font-bold mb-4">{t("Confirm Logout")}</h3>
-            <p className="mb-6">{t("Are you sure you want to log out?")}</p>
+            <h3 className="text-lg font-bold mb-4">Confirm Logout</h3>
+            <p className="mb-6">Are you sure you want to log out?</p>
             <div className="flex justify-between">
               <button
                 onClick={handleLogout}
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
               >
-                {t("Yes")}
+                Yes
               </button>
               <button
                 onClick={() => setShowModal(false)}
                 className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
               >
-                {t("No")}
+                No
               </button>
             </div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
 export default Sidebar;
+
