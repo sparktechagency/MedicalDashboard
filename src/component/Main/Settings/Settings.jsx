@@ -20,34 +20,26 @@ import { useChangePasswordMutation } from "../../../redux/features/profile/profi
 const Settings = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
-  const token = useSelector((state) => state?.auth?.token);
-  // console.log(token);
-
-  const email = user?.email;
-  // console.log(email);
-
-  // console.log(user?.email)
+  console.log(user?.user?.email);
+  const token = useSelector((state) => state?.auth?.user?.tokens?.access?.token);
+  console.log(token);
+  
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modelTitle, setModelTitle] = useState("");
   const [otp, setOtp] = useState("");
   const [form] = Form.useForm();
-  const changePasswordToken = useSelector(
-    (state) => state.auth.changePasswordToken
-  );
+  const changePasswordToken = useSelector( (state) => state.auth.changePasswordToken );
   //change password useing old password rtk query api
-  const [changePassWithOldPass, { isLoading: changePasswordLoading }] =
-    useChangePasswordMutation();
+  const [changePassWithOldPass, { isLoading: changePasswordLoading }] = useChangePasswordMutation();
   // //forgot password rtk query api
-  const [forgotPassword, { isLoading: forgotPasswordLoading }] =
-    useForgotPasswordMutation();
+  const [forgotPassword, { isLoading: forgotPasswordLoading }] = useForgotPasswordMutation();
   // console.log(forgotPasswordData)
 
   // //verify opt rtk query api
   const [verifyOtp, { isLoading: verifyOtpLoading }] = useVerifyEmailMutation();
   // //change password rtk query api
-  const [ResetPassword, { isLoading: resetPassLoading }] =
-    useResetPasswordMutation();
+  const [ResetPassword, { isLoading: resetPassLoading }] = useResetPasswordMutation();
   // console.log(changePassRes)
 
   const onChange = (checked) => {
@@ -64,10 +56,12 @@ const Settings = () => {
       navigate(`/settings/${value}`);
     }
   };
+
   const handleChangePassword = async (values) => {
     console.log(values);
     const { oldPassword, newPassword } = values;
     const data = { oldPassword, newPassword, };
+    console.log(data);
     try {
       const res = await changePassWithOldPass(data);
       console.log(res);
@@ -89,18 +83,17 @@ const Settings = () => {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     const res = await verifyOtp({
-      email: user?.email,
-      otp,
+      email: user?.user?.email,
+      code: otp,
     });
-
-    const changePasswordToken = res.data?.token;
+    console.log(res);
+    const changePasswordToken = res.data.data.attributes.tokens.access.token;
     console.log("change password token is", changePasswordToken);
     dispatch(
       updatePasswordChangeToken({
         changePasswordToken: changePasswordToken,
       })
     );
-
     if (res?.data?.success) {
       setModelTitle("Reset Password");
     }
@@ -113,6 +106,7 @@ const Settings = () => {
     });
     navigate(`/auth`);
   };
+
   const { t } = useTranslation();
 
   const settingsItem = [
@@ -252,13 +246,13 @@ const Settings = () => {
                   className="w-full px-3 py-2"
                 />
               </Form.Item>
-              <p className=" text-secondary font-medium">
+              {/* <p className=" text-secondary font-medium">
                 <button onClick={() => setModelTitle("Forget password")}>
                   <h1 className="underline text-[#48B1DB]">
                     {t("Forget Password")}
                   </h1>
                 </button>
-              </p>
+              </p> */}
               <Form.Item>
                 <button
                   type="submit"

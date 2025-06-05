@@ -26,7 +26,6 @@ const profileApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      // transformResponse: (response) => response.data,
     }),
   }),
 });

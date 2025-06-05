@@ -20,6 +20,7 @@ const ForgetPassword = () => {
   const submit = async (values) => {
     try {
       const res = await forgotPassword(values);
+       console.log(res);
       if (res.error) {
         toast.error(res?.error?.data?.message);
         console.log(res.error);
