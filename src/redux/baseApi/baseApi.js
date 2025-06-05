@@ -4,10 +4,12 @@ export const baseApi = createApi({
   reducerPath: "pokemonApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://d7003.sobhoy.com/api/v1",
+    // baseUrl: "http://10.0.60.206:8080/api/v1",
+    // baseUrl: "https://api.accountabilityworld.org/api/v1",
     prepareHeaders: (headers, { getState }) => {
       // Retrieve the token from your store or local storage
-      const token = localStorage.getItem("token");
-       console.log(token)
+      const token = getState().auth.token;
+      console.log(token);
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }

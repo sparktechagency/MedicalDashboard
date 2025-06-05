@@ -18,12 +18,14 @@ const SignIn = () => {
     const { email, password } = values;
     try {
       const res = await login({ email, password });
+      console.log(res);
       if (res.error) {
         // Show error message if login fails
         toast.error(res.error.data.message);
       } else if (res.data) {
-        const user = res?.data?.data?.attributes;
-        const token = res?.data?.data?.token;
+        const user = res?.data?.data?.attributes?.user;
+        const token = res?.data?.data?.attributes?.tokens?.access?.token;
+        console.log(user, token);
         dispatch(loggedUser({ user, token }));
         toast.success(res.data.message);
         navigate("/"); // Navigate to the root page after successful login
