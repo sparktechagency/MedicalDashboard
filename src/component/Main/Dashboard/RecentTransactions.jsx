@@ -1,69 +1,30 @@
 import { useState } from "react";
-import { Modal, Space, Table, ConfigProvider } from "antd";
+import { ConfigProvider, Modal, Table } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { useGetRecentUserQuery } from "../../../redux/features/user/userApi";
+import image from "../../../assets/user.png"; // Default image path
+import { imageBaseUrl } from "../../../config/imageBaseUrl";
 
-const RecentSellingProducts = () => {
+const RecentTransactions = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  // Example dataSource
-  const dataSource = [
-    {
-      key: "1",
-      sl: "01",
-      productName: "GE Vivid S70 Ultrasound Machine",
-      category: "Diagnostic Equipment",
-      price: "$200",
-      bidPrice: "$210",
-      timeAndDate: "11 Oct 24, 11:10 PM",
-    },
-    {
-      key: "2",
-      sl: "02",
-      productName: "GE Vivid S70 Ultrasound Machine",
-      category: "Diagnostic Equipment",
-      price: "$200",
-      bidPrice: "$210",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-    },
-    {
-      key: "2",
-      sl: "02",
-      productName: "GE Vivid S70 Ultrasound Machine",
-      category: "Diagnostic Equipment",
-      price: "$200",
-      bidPrice: "$210",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-    },
-    {
-      key: "2",
-      sl: "02",
-      productName: "GE Vivid S70 Ultrasound Machine",
-      category: "Diagnostic Equipment",
-      price: "$200",
-      bidPrice: "$210",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-    },
-    {
-      key: "2",
-      sl: "02",
-      productName: "GE Vivid S70 Ultrasound Machine",
-      category: "Diagnostic Equipment",
-      price: "$200",
-      bidPrice: "$210",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-    },
-    // Add more items if needed
-  ];
+  // Fetch data from the Redux API
+  const { data } = useGetRecentUserQuery();
+  // console.log(data?.attributes?.results); // Log data for debugging
+  const dataSource = data?.attributes?.results || [];
+  // console.log(dataSource); // Log dataSource for debugging
 
-  const showModal = (product) => {
-    setSelectedProduct(product);
+  // Show modal with user details
+  const showModal = (user) => {
+    setSelectedUser(user);
     setIsModalVisible(true);
   };
 
+  // Close the modal
   const handleCancel = () => {
     setIsModalVisible(false);
-    setSelectedProduct(null);
+    setSelectedUser(null);
   };
 
   const columns = [
@@ -71,49 +32,59 @@ const RecentSellingProducts = () => {
       title: "#SL",
       dataIndex: "sl",
       key: "sl",
+      render: (_, record, index) => index + 1, // Generate sequential numbers for each row
     },
     {
-      title: "Product Name",
-      dataIndex: "productName",
-      key: "productName",
+      title: "Name & Image",
+      dataIndex: "nameAndImage",
+      key: "nameAndImage",
+      render: (text, record) => (
+        <div className="flex items-center">
+          <img
+            src={record.image ? `${imageBaseUrl}/${record.image}` : `${image}`}
+            alt="user"
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              marginRight: "10px",
+            }}
+          />
+          <span>{record.name}</span>
+        </div>
+      ),
     },
     {
-      title: "Category",
-      dataIndex: "category",
-      key: "category",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
+      title: "Phone",
+      dataIndex: "phone",
+      key: "phone",
     },
     {
-      title: "Bid Price",
-      dataIndex: "bidPrice",
-      key: "bidPrice",
-    },
-    {
-      title: "Time & Date",
-      dataIndex: "timeAndDate",
-      key: "timeAndDate",
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+      render: (text, record) => new Date(record.createdAt).toLocaleDateString(), // Format date
     },
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Space size="middle">
-          <InfoCircleOutlined
-            onClick={() => showModal(record)}
-            style={{ fontSize: "18px", cursor: "pointer" }}
-          />
-        </Space>
+        <InfoCircleOutlined
+          onClick={() => showModal(record)} // Open modal when clicked
+          style={{ fontSize: "18px", cursor: "pointer" }}
+        />
       ),
     },
   ];
 
   return (
-    <div className="w-full col-span-full md:col-span-6 rounded-lg">
-      <h2 className="font-semibold py-3 text-[20px]">Recent New User</h2>
+    <div>
+      <h2>Recent Users</h2>
       <ConfigProvider
         theme={{
           token: {
@@ -130,51 +101,37 @@ const RecentSellingProducts = () => {
         }}
       >
         <Table
-          columns={columns}
           dataSource={dataSource}
+          columns={columns}
+          rowKey="email"
           pagination={false}
           scroll={{ x: 1000 }}
         />
       </ConfigProvider>
 
-      {/* Modal */}
+      {/* Modal for displaying user details */}
       <Modal
-        open={isModalVisible}
-        onOk={handleCancel}
+        title="User Details"
+        visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
-        centered
       >
-        <div className="text-black p-2">
-          <h1 className="text-center text-xl font-semibold my-2 text-gray-500">
-            Product Details
-          </h1>
-          <div className="p-5">
-            <div className="flex justify-between py-3 border-t-2 border-gray-400">
-              <p>Product Name :</p>
-              <p>{selectedProduct?.productName || "N/A"}</p>
-            </div>
-            <div className="flex justify-between py-3 border-t-2 border-gray-400">
-              <p>Category:</p>
-              <p>{selectedProduct?.category || "N/A"}</p>
-            </div>
-            <div className="flex justify-between py-3 border-t-2 border-gray-400">
-              <p>Price :</p>
-              <p>{selectedProduct?.price || "N/A"}</p>
-            </div>
-            <div className="flex justify-between py-3 border-t-2 border-gray-400">
-              <p>Bid Price:</p>
-              <p>{selectedProduct?.bidPrice || "N/A"}</p>
-            </div>
-            <div className="flex justify-between py-3 border-t-2 border-gray-400">
-              <p>Time & Date :</p>
-              <p>{selectedProduct?.timeAndDate || "N/A"}</p>
-            </div>
-          </div>
+        <div>
+          <p className="flex justify-between border-b border-gray-500 py-5 "><strong>Email:</strong> {selectedUser?.email || "N/A"}</p>
+          <p className="flex justify-between border-b border-gray-500 py-5 "><strong>Phone:</strong> {selectedUser?.phone || "N/A"}</p>
+          <p className="flex justify-between border-b border-gray-500 py-5 "><strong>Name:</strong> {selectedUser?.name || "N/A"}</p>
+          <p className="py-5">
+            <img 
+              src={selectedUser?.image ? `${imageBaseUrl}/${selectedUser.image}` : `${image}`}
+              alt="user" 
+              className="w-40 h-40 object-cover rounded-lg"
+            />
+          </p>
         </div>
       </Modal>
     </div>
   );
 };
 
-export default RecentSellingProducts;
+export default RecentTransactions;
+

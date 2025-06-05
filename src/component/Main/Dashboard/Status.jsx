@@ -1,4 +1,5 @@
 import { BsFillClipboard2CheckFill } from "react-icons/bs";
+import { useGetDashboardStatusQuery } from "../../../redux/features/dashboard/dashboardApi";
 
 const data = {
   totalUser: 1200,
@@ -10,15 +11,19 @@ const data = {
   ],
 };
 
-const Alldata = [
-  { title: "Total User", value: data.totalUser },
-  { title: "Total Sold", value: data.recentUserData.length },
-  { title: "Total Revenue", value: data.recentUserData.length },
-  { title: "Active Product", value: data.recentUserData.length },
-  { title: "Granted Balance", value: data.recentUserData.length },
-];
 
 const Status = () => {
+
+  const  {data } = useGetDashboardStatusQuery();
+  // console.log(data);
+ 
+  const Alldata = [
+    { title: "Total User", value: data?.totalUser || 0 },
+    { title: "Total Sold", value: data?.totalSeller || 0 }, 
+    { title: "Total Revenue", value: data?.revenue || 0 }, 
+    { title: "Active Product", value: data?.totalProduct || 0 }, 
+    { title: "Granted Balance", value: data?.grantedBalance || 0 },
+  ];
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-5 gap-7">
       {Alldata.map((item, idx) => (

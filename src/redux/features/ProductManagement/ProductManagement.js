@@ -3,15 +3,15 @@ import { baseApi } from "../../baseApi/baseApi";
 const ProductManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProductAll: builder.query({
-      query: ({ from, to }) => ({
-        url: `/admin/v2/product?from=${from}&to=${to}`,
+      query: () => ({
+        url: `/product/all`,
         method: "GET",
       }),
       providesTags: ["product"]
     }),
-    getProductSearch: builder.query({
-      query: ({text}) => ({
-        url: `/admin/v2/user/${text}`,
+    getProductSingle: builder.query({
+      query: (id) => ({
+        url: `/product/single/${id}`,
         method: "GET",
       }),
       providesTags: ["product"]
@@ -33,4 +33,4 @@ const ProductManagementApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetProductAllQuery, useGetProductSearchQuery, useUpdateProductMutation, useDeleteProductMutation } = ProductManagementApi;
+export const { useGetProductAllQuery, useGetProductSingleQuery, useUpdateProductMutation, useDeleteProductMutation } = ProductManagementApi;

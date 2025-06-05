@@ -18,7 +18,7 @@ const userApi = baseApi.injectEndpoints({
     }),
     getRecentUser: builder.query({
      query: () => ({
-        url: '/auth/recentUser', // Replace with the actual endpoint for fetching users
+        url: '/users/all', 
         method: 'GET',
       }),
       transformResponse: (response) => response.data,

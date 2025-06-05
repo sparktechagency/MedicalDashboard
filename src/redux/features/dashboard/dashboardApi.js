@@ -4,7 +4,14 @@ const dashboardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getDashboardStatus: builder.query({
       query: () => ({
-        url: "/admin/dashboard/status",
+        url: "/dashboard/admin/statistics",
+        method: "GET",
+      }),
+      transformResponse: (response) => response?.data?.attributes,
+    }),
+    getTransactionRatio: builder.query({
+      query: () => ({
+        url: "/dashboard/admin/transaction_ratio",
         method: "GET",
       }),
       transformResponse: (response) => response?.data?.attributes,
@@ -12,5 +19,4 @@ const dashboardApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetDashboardStatusQuery} =
-  dashboardApi;
+export const { useGetDashboardStatusQuery, useGetTransactionRatioQuery } = dashboardApi;

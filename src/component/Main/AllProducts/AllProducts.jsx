@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { Pagination } from "antd";
 import { Link } from "react-router-dom";
+import { useGetProductAllQuery } from "../../../redux/features/ProductManagement/ProductManagement";
+import { imageBaseUrl } from "../../../config/imageBaseUrl";
 
 const AllProducts = () => {
-  const allProducts = Array(20)
-    .fill({
-      id: 1,
-      name: "GE Vivid S70 Ultrasound Machine",
-      image: "https://i.ibb.co/bjzn3zKW/Rectangle-3.png",
-      price: 200,
-      status: "APPROVE",
-    })
-    .map((product, index) => ({
-      ...product,
-      status: index < 2 ? "PENDING" : "APPROVE",
-    }));
+  const { data, isLoading, error } = useGetProductAllQuery();
+  
+  // Transform API data to match component expectations
+  const allProducts = data?.data?.attributes?.map((product, index) => ({
+    ...product,
+    id: product._id, // Map _id to id
+    name: product.title, // Map title to name
+    image: product.images?.[0], // Use first image from images array
+    status: product.status
+  })) || [];
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
@@ -28,6 +28,14 @@ const AllProducts = () => {
     setCurrentPage(page);
   };
 
+  if (isLoading) {
+    return <div>Loading products...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading products: {error.message}</div>;
+  }
+
   return (
     <div>
       <h1 className="text-[20px] font-semibold text-gray-800 mb-4">
@@ -38,19 +46,19 @@ const AllProducts = () => {
         {currentProducts.map((product, index) => (
           <Link
             to="/BidderList"
-            key={index}
+            key={product.id}
             className="flex items-center justify-between border-[#91C5DF] bg-gray-50 border my-5 rounded-md p-1"
           >
             <div className="flex items-center space-x-4">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="h-16 w-16 object-cover"
-              />
+            <img
+  src={product.images?.[0] ? `${imageBaseUrl}/${product.images[0]}` : ""}
+  alt={product.name}
+  className="h-16 w-16 object-cover"
+/>
               <div>
                 <p className="text-gray-800 font-medium">{product.name}</p>
                 <div className="flex space-x-5 items-center">
-                  <p className="text-gray-600">${product.price}</p>{" "}
+                  <p className="text-gray-600">${product.price}</p>
                   <p
                     className={`px-3 py-1 rounded-full text-sm ${
                       product.status === "PENDING"
@@ -96,7 +104,7 @@ const AllProducts = () => {
           total={allProducts.length}
           pageSize={itemsPerPage}
           onChange={handlePageChange}
-          showSizeChanger={false} // optional, hide pageSize selector
+          showSizeChanger={false}
         />
       </div>
     </div>

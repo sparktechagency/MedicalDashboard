@@ -1,10 +1,17 @@
 
 import { Pie } from '@ant-design/plots';
+import { useGetDashboardStatusQuery } from '../../../redux/features/dashboard/dashboardApi';
 
 const DemoPieChart = () => {
+
+const  {data:getdata } = useGetDashboardStatusQuery();
+  const {totalBid, totalProduct} = getdata || {};
+  console.log('totalBid:', totalBid);
+  console.log('totalProduct:', totalProduct);
+
   const data = [
-    { type: 'Active Product', value: 75 },
-    { type: 'Total Sold', value: 35 },
+    { type: 'Total Bid', value: totalBid },
+    { type: 'Total Product', value: totalProduct },
   ];
 
   const config = {
