@@ -8,15 +8,18 @@ const MAX_SIZE_MB = 5;
 const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 
 const UploadProduct = () => {
-  const [productTitle, setProductTitle] = useState("");
-  const [productCategory, setProductCategory] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [productOrderNumber, setProductOrderNumber] = useState("");
-  const [productDescription, setProductDescription] = useState("");
-  const [productBidDate, setProductBidDate] = useState("");
-  const [productBidHour, setProductBidHour] = useState("");
-  const [productBidMinute, setProductBidMinute] = useState("");
-  const [productBidSecond, setProductBidSecond] = useState("");
+  const [formData, setFormData] = useState({
+    productTitle: "",
+    productCategory: "",
+    productPrice: "",
+    productOrderNumber: "",
+    productDescription: "",
+    productBidDate: "",
+    productBidHour: "",
+    productBidMinute: "",
+    productBidSecond: "",
+  });
+
   const [profileImages, setProfileImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [error, setError] = useState(null);
@@ -26,6 +29,11 @@ const UploadProduct = () => {
       profileImages.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [profileImages]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleImageUpload = (e) => {
     const files = e.target.files;
@@ -80,20 +88,10 @@ const UploadProduct = () => {
     setError(null);
   };
 
-  const handleUpdateProfile = () => {
-    console.log("Profile updated:", {
-      productTitle,
-      productCategory,
-      productPrice,
-      productOrderNumber,
-      productDescription,
-      productBidDate,
-      productBidHour,
-      productBidMinute,
-      productBidSecond,
-      imageFiles,
-    });
-    // TODO: Implement backend API call to upload images and form data
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Submitted Data:", { ...formData, imageFiles });
+    // TODO: Send to backend API
   };
 
   return (
@@ -103,7 +101,7 @@ const UploadProduct = () => {
 
       <div className="flex justify-end -mb-10 space-x-2">
         <a href="/AllCategory">
-            <button className="bg-[#48B1DB] text-white py-2 px-4 rounded-md">
+          <button className="bg-[#48B1DB] text-white py-2 px-4 rounded-md">
             All Category
           </button>
         </a>
@@ -116,124 +114,102 @@ const UploadProduct = () => {
 
       <UploadCategory />
 
-      <div className="max-w-7xl bg-[#E6F1F8] p-8 rounded-lg shadow-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-7xl bg-[#E6F1F8] p-8 rounded-lg shadow-lg"
+      >
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-semibold">Upload Product</h2>
         </div>
 
         <div className="mt-6 md:grid lg:grid-cols-2 md:gap-6">
-          {/* Left Section */}
           <div>
-            {/* Product Title */}
+            {/* Left Side Inputs */}
             <div className="flex flex-col my-2">
               <label className="text-gray-600">Product Title</label>
               <input
                 type="text"
-                value={productTitle}
-                onChange={(e) => setProductTitle(e.target.value)}
+                name="productTitle"
+                value={formData.productTitle}
+                onChange={handleChange}
                 className="border border-[#48B1DB] p-3 rounded-md"
                 placeholder="Type product title"
               />
             </div>
 
-            {/* Product Category */}
             <div className="flex flex-col my-2">
               <label className="text-gray-600">Product Category</label>
               <input
                 type="text"
-                value={productCategory}
-                onChange={(e) => setProductCategory(e.target.value)}
+                name="productCategory"
+                value={formData.productCategory}
+                onChange={handleChange}
                 className="border border-[#48B1DB] p-3 rounded-md"
                 placeholder="Type product category"
               />
             </div>
 
-            {/* Product Price */}
             <div className="flex flex-col my-2">
               <label className="text-gray-600">Product Price</label>
               <input
                 type="text"
-                value={productPrice}
-                onChange={(e) => setProductPrice(e.target.value)}
+                name="productPrice"
+                value={formData.productPrice}
+                onChange={handleChange}
                 className="border border-[#48B1DB] p-3 rounded-md"
                 placeholder="Type product price"
               />
             </div>
 
-            {/* Product Order Number */}
             <div className="flex flex-col my-2">
               <label className="text-gray-600">Product Order Number</label>
               <input
                 type="text"
-                value={productOrderNumber}
-                onChange={(e) => setProductOrderNumber(e.target.value)}
+                name="productOrderNumber"
+                value={formData.productOrderNumber}
+                onChange={handleChange}
                 className="border border-[#48B1DB] p-3 rounded-md"
                 placeholder="Type product order number"
               />
             </div>
 
-            {/* Product Description */}
             <div className="flex flex-col my-2">
               <label className="text-gray-600">Product Description</label>
               <textarea
-                value={productDescription}
-                onChange={(e) => setProductDescription(e.target.value)}
+                name="productDescription"
+                value={formData.productDescription}
+                onChange={handleChange}
                 className="border border-[#48B1DB] p-3 rounded-md"
                 placeholder="Type product description"
               />
             </div>
           </div>
 
-          {/* Right Section */}
           <div>
-            {/* Product Bid Date Time */}
+            {/* Right Side Inputs */}
             <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Bid Date Time</label>
+              <label className="text-gray-600">Product Bid Date</label>
               <input
                 type="date"
-                value={productBidDate}
-                onChange={(e) => setProductBidDate(e.target.value)}
+                name="productBidDate"
+                value={formData.productBidDate}
+                onChange={handleChange}
                 className="border border-[#48B1DB] p-3 rounded-md"
               />
             </div>
 
-            {/* Product Bid Hour Time */}
             <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Bid  Time</label>
+              <label className="text-gray-600">Bid Hour</label>
               <input
                 type="number"
-                value={productBidHour}
-                onChange={(e) => setProductBidHour(e.target.value)}
+                name="productBidHour"
+                value={formData.productBidHour}
+                onChange={handleChange}
                 className="border border-[#48B1DB] p-3 rounded-md"
-                placeholder="time"
               />
             </div>
 
-            {/* Product Bid Minute Time
-            <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Bid Minute Time</label>
-              <input
-                type="number"
-                value={productBidMinute}
-                onChange={(e) => setProductBidMinute(e.target.value)}
-                className="border border-[#48B1DB] p-3 rounded-md"
-                placeholder="Minute"
-              />
-            </div> */}
-
-            {/* Product Bid Second Time */}
-            {/* <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Bid Second Time</label>
-              <input
-                type="number"
-                value={productBidSecond}
-                onChange={(e) => setProductBidSecond(e.target.value)}
-                className="border border-[#48B1DB] p-3 rounded-md"
-                placeholder="Second"
-              />
-            </div> */}
-
-            {/* Product Image Upload */}
+            {/* Image Upload */}
             <div className="flex flex-col mt-6">
               <label htmlFor="imageInput" className="text-gray-600">
                 Product Images (Max 5)
@@ -255,10 +231,8 @@ const UploadProduct = () => {
                 </label>
               </div>
 
-              {/* Display error message */}
               {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
-              {/* Display selected images */}
               {profileImages.length > 0 && (
                 <div className="mt-4 grid grid-cols-4 gap-2">
                   {profileImages.map((image, index) => (
@@ -284,17 +258,16 @@ const UploadProduct = () => {
           </div>
         </div>
 
-        {/* Upload Button */}
+        {/* Submit Button */}
         <div className="mt-6 flex justify-start">
           <button
-            onClick={handleUpdateProfile}
+            type="submit"
             className="w-full md:w-auto py-2 px-4 bg-[#48B1DB] text-white rounded-md transition hover:bg-[#3a9cbf]"
-            type="button"
           >
             Upload
           </button>
         </div>
-      </div>
+      </form>
     </section>
   );
 };

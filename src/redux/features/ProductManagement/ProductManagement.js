@@ -2,9 +2,17 @@ import { baseApi } from "../../baseApi/baseApi";
 
 const ProductManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    createProduct: builder.mutation({
+      query: (data) => ({
+        url: `/product`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["product"],
+    }),
     getProductAll: builder.query({
       query: () => ({
-        url: `/product/all`,
+        url: `/product/self`,
         method: "GET",
       }),
       providesTags: ["product"]
@@ -18,8 +26,8 @@ const ProductManagementApi = baseApi.injectEndpoints({
     }),
     UpdateProduct: builder.mutation({
       query: (id) => ({
-        url: `/admin/v2/ban-user/${id}`,
-        method: "POST",
+        url: `/product/${id}`,
+        method: "PATCH",
         body: data,
       }),
     }),
@@ -33,4 +41,10 @@ const ProductManagementApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetProductAllQuery, useGetProductSingleQuery, useUpdateProductMutation, useDeleteProductMutation } = ProductManagementApi;
+export const { 
+  useGetProductSingleQuery,
+  useGetProductAllQuery,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
+  useCreateProductMutation,
+} = ProductManagementApi;

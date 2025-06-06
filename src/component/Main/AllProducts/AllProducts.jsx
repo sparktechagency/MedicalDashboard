@@ -1,24 +1,42 @@
 import { useState } from "react";
-import { Pagination } from "antd";
+import { message, Pagination } from "antd";
 import { Link } from "react-router-dom";
-import { useGetProductAllQuery } from "../../../redux/features/ProductManagement/ProductManagement";
+import {
+  useDeleteProductMutation,
+  useGetProductAllQuery,
+} from "../../../redux/features/ProductManagement/ProductManagement";
 import { imageBaseUrl } from "../../../config/imageBaseUrl";
 
 const AllProducts = () => {
-  const { data, isLoading, error } = useGetProductAllQuery();
-  
-  // Transform API data to match component expectations
-  const allProducts = data?.data?.attributes?.map((product, index) => ({
-    ...product,
-    id: product._id, // Map _id to id
-    name: product.title, // Map title to name
-    image: product.images?.[0], // Use first image from images array
-    status: product.status
-  })) || [];
+  const { data, isLoading, error, refetch } = useGetProductAllQuery();
+  const [deleteProduct] = useDeleteProductMutation();
+
+  // Transform API data
+  const allProducts =
+    data?.data?.attributes?.map((product) => ({
+      ...product,
+      id: product._id,
+      name: product.title,
+      image: product.images?.[0],
+      status: product.status,
+    })) || [];
+
+  const handeleDeleteProduct = async (id) => {
+    try {
+     const res = await deleteProduct(id).unwrap();
+     console.log(res)
+     if(res.code === 200){
+      message.success("Product deleted successfully");
+      refetch(); // Refresh the product list after deletion
+     }      
+      // Refresh product list after deletion
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+    }
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-  const totalPages = Math.ceil(allProducts.length / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -43,18 +61,20 @@ const AllProducts = () => {
       </h1>
 
       <div>
-        {currentProducts.map((product, index) => (
+        {currentProducts.map((product) => (
           <Link
             to="/BidderList"
             key={product.id}
             className="flex items-center justify-between border-[#91C5DF] bg-gray-50 border my-5 rounded-md p-1"
           >
             <div className="flex items-center space-x-4">
-            <img
-  src={product.images?.[0] ? `${imageBaseUrl}/${product.images[0]}` : ""}
-  alt={product.name}
-  className="h-16 w-16 object-cover"
-/>
+              <img
+                src={
+                  product.image ? `${imageBaseUrl}/${product.image}` : ""
+                }
+                alt={product.name}
+                className="h-16 w-16 object-cover"
+              />
               <div>
                 <p className="text-gray-800 font-medium">{product.name}</p>
                 <div className="flex space-x-5 items-center">
@@ -71,13 +91,20 @@ const AllProducts = () => {
                 </div>
               </div>
             </div>
+
             <div className="flex items-center space-x-2">
               <Link to={`/AllProducts/${product.id}`}>
                 <button className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
                   Edit
                 </button>
               </Link>
-              <button className="p-2 hover:bg-gray-200 rounded">
+              <button
+                onClick={(e) => {
+                  e.preventDefault(); // Prevents navigating via Link
+                  handeleDeleteProduct(product.id);
+                }}
+                className="p-2 hover:bg-gray-200 rounded"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 text-gray-500"
