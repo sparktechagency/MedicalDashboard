@@ -63,7 +63,7 @@ const AllCategory = () => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Link to={`/AllCategory/${product.id}`}>
+              <Link to={`/AllCategory/${product._id}`}>
                 <button className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
                   Edit
                 </button>

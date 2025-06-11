@@ -12,7 +12,7 @@ const VendorRequests = baseApi.injectEndpoints({
     }),
     getProductRequestAll: builder.query({
       query: () => ({
-        url: `/category`,
+        url: `/product/request`,
         method: "GET",
       }),
       providesTags: ["product"]
