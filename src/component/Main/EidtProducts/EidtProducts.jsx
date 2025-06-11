@@ -120,9 +120,16 @@ const EditProducts = () => {
       formDataToSend.append("image", file);
     });
 
+
+    const data = {
+      id,
+      data: formDataToSend,
+    };
+
     try {
       setIsSubmitting(true);
-      const response = await updateProduct(formDataToSend).unwrap();
+      const response = await updateProduct(data).unwrap();
+      console.log(response)
       message.success("Product updated successfully");
     } catch (err) {
       console.error(err);

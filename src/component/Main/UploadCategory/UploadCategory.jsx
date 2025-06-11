@@ -1,15 +1,21 @@
 import { useState, useEffect } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
+import { useCreateCategoryMutation } from "../../../redux/features/Category/Category";
+import { message } from "antd";
 
 const MAX_IMAGES = 1;
-const MAX_SIZE_MB = 5;
+const MAX_SIZE_MB = 10;
 const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 
 const UploadCategory = () => {
   const [productCategory, setProductCategory] = useState("");
   const [profileImages, setProfileImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); 
+
+
+  const [createCategory] = useCreateCategoryMutation();
+  
 
   useEffect(() => {
     return () => {
@@ -51,9 +57,16 @@ const UploadCategory = () => {
     setError(null);
   };
 
-  const handleUpload = () => {
-    // Add upload logic here (API call, etc.)
-    console.log("Uploading:", { productCategory, imageFiles });
+  const handleUpload = async() => {
+    const formData = new FormData();
+    formData.append("name", productCategory);
+    imageFiles.forEach((file) => formData.append("image", file));
+    const res = await createCategory(formData);
+    console.log(res);
+    if(res.data?.code === 201){
+      message.success(res?.data?.message)
+    }
+    
   };
 
   return (

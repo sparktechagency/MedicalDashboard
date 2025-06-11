@@ -3,8 +3,9 @@ import { FaImage, FaTimes } from "react-icons/fa";
 import Status from "../Dashboard/Status";
 import UploadCategory from "../UploadCategory/UploadCategory";
 
+
 const MAX_IMAGES = 5;
-const MAX_SIZE_MB = 5;
+const MAX_SIZE_MB = 20;
 const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 
 const UploadProduct = () => {
@@ -90,8 +91,16 @@ const UploadProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitted Data:", { ...formData, imageFiles });
-    // TODO: Send to backend API
+    const form = e.target;
+
+    const title = form.productTitle.value;
+    const category = form.productCategory.value;
+    const price = form.productPrice.value;
+    const orderNumber = form.productOrderNumber.value;
+    const description = form.productDescription.value;
+    const bidDate = form.productBidDate.value;
+  
+
   };
 
   return (
@@ -198,16 +207,6 @@ const UploadProduct = () => {
               />
             </div>
 
-            <div className="flex flex-col my-2">
-              <label className="text-gray-600">Bid Hour</label>
-              <input
-                type="number"
-                name="productBidHour"
-                value={formData.productBidHour}
-                onChange={handleChange}
-                className="border border-[#48B1DB] p-3 rounded-md"
-              />
-            </div>
 
             {/* Image Upload */}
             <div className="flex flex-col mt-6">

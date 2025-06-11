@@ -1,29 +1,43 @@
 import { useState } from "react";
-import { Pagination } from "antd";
+import { Pagination, message } from "antd";
 import { Link } from "react-router-dom";
+import {
+  useDeleteCategoryMutation,
+  useGetCategoryAllQuery,
+} from "../../../redux/features/Category/Category";
+import { imageBaseUrl } from "../../../config/imageBaseUrl";
 
 const AllCategory = () => {
-  const allProducts = Array(20)
-    .fill({
-      id: 1,
-      name: "GE Vivid S70 Ultrasound Machine",
-      image: "https://i.ibb.co/bjzn3zKW/Rectangle-3.png",
-    })
-    .map((product, index) => ({
-      ...product,
-      status: index < 2 ? "PENDING" : "APPROVE",
-    }));
+  const { data, refetch } = useGetCategoryAllQuery(); // ✅ Include refetch
+  const [deleteCategory] = useDeleteCategoryMutation();
+
+  const allProducts = data?.data?.attributes || [];
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-  const totalPages = Math.ceil(allProducts.length / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentProducts = allProducts.slice(startIndex, endIndex);
-
+  
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleDeleteProduct = async (id) => {
+    try {
+      const res = await deleteCategory(id).unwrap();
+      console.log(res);
+      if (res.code === 200) {
+        message.success("Category deleted successfully");
+        refetch(); // ✅ Refresh the list
+      } else {
+        message.error("Failed to delete category");
+      }
+    } catch (error) {
+      console.error("Failed to delete category:", error);
+      message.error("Something went wrong while deleting");
+    }
   };
 
   return (
@@ -34,14 +48,13 @@ const AllCategory = () => {
 
       <div>
         {currentProducts.map((product, index) => (
-          <Link
-            to="/BidderList"
+          <div
             key={index}
             className="flex items-center justify-between border-[#91C5DF] bg-gray-50 border my-5 rounded-md p-1"
           >
             <div className="flex items-center space-x-4">
               <img
-                src={product.image}
+                src={product.image ? `${imageBaseUrl}/${product.image}` : ""}
                 alt={product.name}
                 className="h-16 w-16 object-cover"
               />
@@ -55,7 +68,10 @@ const AllCategory = () => {
                   Edit
                 </button>
               </Link>
-              <button className="p-2 hover:bg-gray-200 rounded">
+              <button
+                onClick={() => handleDeleteProduct(product._id)}
+                className="p-2 hover:bg-gray-200 rounded"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 text-gray-500"
@@ -72,7 +88,7 @@ const AllCategory = () => {
                 </svg>
               </button>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
 
@@ -82,7 +98,7 @@ const AllCategory = () => {
           total={allProducts.length}
           pageSize={itemsPerPage}
           onChange={handlePageChange}
-          showSizeChanger={false} // optional, hide pageSize selector
+          showSizeChanger={false}
         />
       </div>
     </div>

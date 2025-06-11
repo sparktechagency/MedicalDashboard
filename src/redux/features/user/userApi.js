@@ -4,7 +4,7 @@ const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllUsers: builder.query({
      query: () => ({
-        url: '/auth/fighter', // Replace with the actual endpoint for fetching users
+        url: `/users/all`, // Replace with the actual endpoint for fetching users
         method: 'GET',
       }),
       transformResponse: (response) => response.data,
