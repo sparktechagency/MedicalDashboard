@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaImage, FaTimes } from "react-icons/fa";
 import Status from "../Dashboard/Status";
 import UploadCategory from "../UploadCategory/UploadCategory";
+import { useGetCategoryAllQuery } from "../../../redux/features/Category/Category";
 
 
 const MAX_IMAGES = 5;
@@ -9,6 +10,11 @@ const MAX_SIZE_MB = 20;
 const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 
 const UploadProduct = () => {
+
+ const {data} = useGetCategoryAllQuery();
+ console.log(data);
+
+
   const [formData, setFormData] = useState({
     productTitle: "",
     productCategory: "",
@@ -21,15 +27,15 @@ const UploadProduct = () => {
     productBidSecond: "",
   });
 
-  const [profileImages, setProfileImages] = useState([]);
+  const [profileImage, setProfileImage] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     return () => {
-      profileImages.forEach((url) => URL.revokeObjectURL(url));
+      profileImage.forEach((url) => URL.revokeObjectURL(url));
     };
-  }, [profileImages]);
+  }, [profileImage]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -232,9 +238,9 @@ const UploadProduct = () => {
 
               {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
-              {profileImages.length > 0 && (
+              {profileImage.length > 0 && (
                 <div className="mt-4 grid grid-cols-4 gap-2">
-                  {profileImages.map((image, index) => (
+                  {profileImage.map((image, index) => (
                     <div key={index} className="relative">
                       <img
                         src={image}
