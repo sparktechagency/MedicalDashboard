@@ -25,13 +25,7 @@ const EditProducts = () => {
   const [existingImageNames, setExistingImageNames] = useState([]);
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    productTitle: productData?.title,
-    productCategory: productData?.category?._id,  // Ensure category ID is stored
-    productPrice: productData?.price,
-    productDescription: productData?.description,
-    productBidDate: productData?.date,
-  });
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     if (productData?.images?.length) {
@@ -159,7 +153,7 @@ const EditProducts = () => {
                 <input
                   type="text"
                   name="productTitle"
-                  value={formData.productTitle}
+                  value={productData?.title}
                   onChange={handleChange}
                   className="border border-[#48B1DB] p-3 rounded-md"
                   placeholder="Type product title"
@@ -170,7 +164,7 @@ const EditProducts = () => {
                 <label className="block text-gray-600 mt-4 mb-1">Product Category</label>
                 <select
                   name="productCategory"
-                  value={formData.productCategory}
+                  value={productData?.category?._id}
                   onChange={handleChange}
                   className="w-full border border-[#48B1DB] p-3 rounded-md"
                 >
@@ -188,7 +182,7 @@ const EditProducts = () => {
                 <input
                   type="number"
                   name="productPrice"
-                  value={formData.productPrice}
+                  value={productData?.price}
                   onChange={handleChange}
                   className="border border-[#48B1DB] p-3 rounded-md"
                   placeholder="Type product price"
@@ -199,7 +193,7 @@ const EditProducts = () => {
                 <label className="text-gray-600">Product Description</label>
                 <textarea
                   name="productDescription"
-                  value={formData.productDescription}
+                  value={productData?.description}
                   onChange={handleChange}
                   className="border border-[#48B1DB] p-3 rounded-md"
                   placeholder="Type product description"
