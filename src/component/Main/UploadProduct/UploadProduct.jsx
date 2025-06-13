@@ -1,20 +1,15 @@
 import { useState, useEffect } from "react";
 import { FaImage, FaTimes } from "react-icons/fa";
-import Status from "../Dashboard/Status";
-import UploadCategory from "../UploadCategory/UploadCategory";
 import { useGetCategoryAllQuery } from "../../../redux/features/Category/Category";
-
+import { useCreateProductMutation } from "../../../redux/features/ProductManagement/ProductManagement";
+import { message } from "antd";
 
 const MAX_IMAGES = 5;
+const MIN_IMAGES = 4; // Minimum 4 images
 const MAX_SIZE_MB = 20;
-const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
+const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg", "image/svg+xml"];
 
 const UploadProduct = () => {
-
- const {data} = useGetCategoryAllQuery();
- console.log(data);
-
-
   const [formData, setFormData] = useState({
     productTitle: "",
     productCategory: "",
@@ -22,20 +17,26 @@ const UploadProduct = () => {
     productOrderNumber: "",
     productDescription: "",
     productBidDate: "",
-    productBidHour: "",
-    productBidMinute: "",
-    productBidSecond: "",
   });
 
-  const [profileImage, setProfileImage] = useState([]);
-  const [imageFiles, setImageFiles] = useState([]);
+  const [productImages, setProductImages] = useState([]); // Renamed to 'productImages'
+  const [productFiles, setProductFiles] = useState([]); // Renamed to 'productFiles'
   const [error, setError] = useState(null);
+
+  const { data, isLoading, error: apiError } = useGetCategoryAllQuery();
+
+  const [createProduct] = useCreateProductMutation();
 
   useEffect(() => {
     return () => {
-      profileImage.forEach((url) => URL.revokeObjectURL(url));
+      productImages.forEach((url) => URL.revokeObjectURL(url));
     };
-  }, [profileImage]);
+  }, [productImages]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (apiError) return <div>Error loading categories</div>;
+
+  const categories = data?.data?.attributes || [];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,212 +47,180 @@ const UploadProduct = () => {
     const files = e.target.files;
     if (!files) return;
 
-    if (imageFiles.length + files.length > MAX_IMAGES) {
+    if (productFiles.length + files.length > MAX_IMAGES) {
       setError(`You can upload a maximum of ${MAX_IMAGES} images.`);
       return;
     }
 
-    const newImages = [];
+    const newPreviewUrls = [];
     const newFiles = [];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-
       if (!VALID_IMAGE_TYPES.includes(file.type)) {
         setError("Please upload valid image files (JPG, JPEG, or PNG).");
         return;
       }
-
       if (file.size > MAX_SIZE_MB * 1024 * 1024) {
         setError(`Each file must be less than ${MAX_SIZE_MB}MB.`);
         return;
       }
-
-      newImages.push(URL.createObjectURL(file));
+      newPreviewUrls.push(URL.createObjectURL(file));
       newFiles.push(file);
     }
 
     setError(null);
-    profileImages.forEach((url) => URL.revokeObjectURL(url));
-
-    setProfileImages((prev) => [...prev, ...newImages]);
-    setImageFiles((prev) => [...prev, ...newFiles]);
+    setProductImages((prev) => [...prev, ...newPreviewUrls]);
+    setProductFiles((prev) => [...prev, ...newFiles]);
   };
 
   const handleRemoveImage = (index) => {
-    setProfileImages((prev) => {
-      const newImages = [...prev];
-      URL.revokeObjectURL(newImages[index]);
-      newImages.splice(index, 1);
-      return newImages;
+    setProductImages((prev) => {
+      const urls = [...prev];
+      URL.revokeObjectURL(urls[index]);
+      urls.splice(index, 1);
+      return urls;
     });
-
-    setImageFiles((prev) => {
-      const newFiles = [...prev];
-      newFiles.splice(index, 1);
-      return newFiles;
+    setProductFiles((prev) => {
+      const files = [...prev];
+      files.splice(index, 1);
+      return files;
     });
-
     setError(null);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const form = e.target;
-
-    const title = form.productTitle.value;
-    const category = form.productCategory.value;
-    const price = form.productPrice.value;
-    const orderNumber = form.productOrderNumber.value;
-    const description = form.productDescription.value;
-    const bidDate = form.productBidDate.value;
   
-
+    if (!formData.productTitle || !formData.productCategory || !formData.productPrice || !formData.productDescription || !formData.productBidDate) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+  
+    if (productFiles.length < MIN_IMAGES) {
+      setError(`Please upload at least ${MIN_IMAGES} images.`);
+      return;
+    }
+  
+    // Prepare the form data
+    const payload = new FormData();
+    payload.append("title", formData.productTitle); // Title
+    payload.append("category", formData.productCategory); // Category
+    payload.append("price", formData.productPrice); // Price
+    payload.append("description", formData.productDescription); // Description
+    payload.append("date", formData.productBidDate); // Date (Bid Date)
+  
+    // Append images
+    productFiles.forEach((file) => {
+      payload.append("image", file); // Note the key for the image field is now "image"
+    });
+  
+    try {
+      const res = await createProduct(payload);
+      console.log(res);
+      if (res?.data?.code === 201) {
+        // Successful upload, show success message
+        message.success("Product uploaded successfully.");
+      } else {
+        setError("Upload failed. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Upload failed. Please try again.");
+    }
   };
+  
 
   return (
     <section>
-      <Status />
-      <br />
+      <form onSubmit={handleSubmit} className="max-w-7xl bg-[#E6F1F8] p-2 lg:p-8 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-semibold mt-10 md:mt-0 md:mb-4">Upload Product</h2>
 
-      <div className="flex justify-end -mb-10 space-x-2">
-        <a href="/AllCategory">
-          <button className="bg-[#48B1DB] text-white py-2 px-4 rounded-md">
-            All Category
-          </button>
-        </a>
-        <a href="/AllProducts">
-          <button className="bg-[#48B1DB] text-white py-2 px-4 rounded-md">
-            All Products
-          </button>
-        </a>
-      </div>
-
-      <UploadCategory />
-
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-7xl bg-[#E6F1F8] p-8 rounded-lg shadow-lg"
-      >
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold">Upload Product</h2>
-        </div>
-
-        <div className="mt-6 md:grid lg:grid-cols-2 md:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            {/* Left Side Inputs */}
-            <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Title</label>
-              <input
-                type="text"
-                name="productTitle"
-                value={formData.productTitle}
-                onChange={handleChange}
-                className="border border-[#48B1DB] p-3 rounded-md"
-                placeholder="Type product title"
-              />
-            </div>
-
-            <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Category</label>
-              <input
-                type="text"
-                name="productCategory"
-                value={formData.productCategory}
-                onChange={handleChange}
-                className="border border-[#48B1DB] p-3 rounded-md"
-                placeholder="Type product category"
-              />
-            </div>
-
-            <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Price</label>
-              <input
-                type="text"
-                name="productPrice"
-                value={formData.productPrice}
-                onChange={handleChange}
-                className="border border-[#48B1DB] p-3 rounded-md"
-                placeholder="Type product price"
-              />
-            </div>
-
-            <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Order Number</label>
-              <input
-                type="text"
-                name="productOrderNumber"
-                value={formData.productOrderNumber}
-                onChange={handleChange}
-                className="border border-[#48B1DB] p-3 rounded-md"
-                placeholder="Type product order number"
-              />
-            </div>
-
-            <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Description</label>
-              <textarea
-                name="productDescription"
-                value={formData.productDescription}
-                onChange={handleChange}
-                className="border border-[#48B1DB] p-3 rounded-md"
-                placeholder="Type product description"
-              />
-            </div>
+            <label className="block text-gray-600 mb-1">Product Title</label>
+            <input
+              type="text"
+              name="productTitle"
+              value={formData.productTitle}
+              onChange={handleChange}
+              className="w-full border border-[#48B1DB] p-3 rounded-md"
+              placeholder="Type product title"
+            />
+            <label className="block text-gray-600 mt-4 mb-1">Product Category</label>
+            <select
+              name="productCategory"
+              value={formData.productCategory}
+              onChange={handleChange}
+              className="w-full border border-[#48B1DB] p-3 rounded-md"
+            >
+              <option value="">Select category</option>
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            <label className="block text-gray-600 mt-4 mb-1">Product Price</label>
+            <input
+              type="number"
+              name="productPrice"
+              value={formData.productPrice}
+              onChange={handleChange}
+              className="w-full border border-[#48B1DB] p-3 rounded-md"
+              placeholder="Type product price"
+            />
+            <label className="block text-gray-600 mt-4 mb-1">Product Description</label>
+            <textarea
+              name="productDescription"
+              value={formData.productDescription}
+              onChange={handleChange}
+              className="w-full border border-[#48B1DB] p-3 rounded-md"
+              placeholder="Type product description"
+            />
           </div>
 
           <div>
-            {/* Right Side Inputs */}
-            <div className="flex flex-col my-2">
-              <label className="text-gray-600">Product Bid Date</label>
-              <input
-                type="date"
-                name="productBidDate"
-                value={formData.productBidDate}
-                onChange={handleChange}
-                className="border border-[#48B1DB] p-3 rounded-md"
-              />
-            </div>
+            <label className="block text-gray-600 mb-1">Bid Date</label>
+            <input
+              type="date"
+              name="productBidDate"
+              value={formData.productBidDate}
+              onChange={handleChange}
+              className="w-full border border-[#48B1DB] p-3 rounded-md"
+            />
 
-
-            {/* Image Upload */}
-            <div className="flex flex-col mt-6">
-              <label htmlFor="imageInput" className="text-gray-600">
-                Product Images (Max 5)
-              </label>
-              <div className="border border-[#48B1DB] p-4 text-center rounded-md cursor-pointer hover:bg-gray-100">
+            <div className="mt-6">
+              <label className="block text-gray-600 mb-1">Product Images (Max 5)</label>
+              <div className="border border-[#48B1DB] p-4 text-center rounded-md hover:bg-gray-100">
                 <input
                   type="file"
                   id="imageInput"
-                  accept="image/jpeg,image/png,image/jpg"
+                  accept={VALID_IMAGE_TYPES.join(",")}
                   multiple
                   className="hidden"
                   onChange={handleImageUpload}
                 />
-                <label
-                  htmlFor="imageInput"
-                  className="text-[#48B1DB] cursor-pointer"
-                >
+                <label htmlFor="imageInput" className="text-[#48B1DB] cursor-pointer">
                   <FaImage className="inline-block mr-2" /> Upload images
                 </label>
               </div>
 
               {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
-              {profileImage.length > 0 && (
-                <div className="mt-4 grid grid-cols-4 gap-2">
-                  {profileImage.map((image, index) => (
-                    <div key={index} className="relative">
+              {productImages.length > 0 && (
+                <div className="mt-4 grid-cols-2 grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2">
+                  {productImages.map((url, idx) => (
+                    <div key={idx} className="relative">
                       <img
-                        src={image}
-                        alt={`Uploaded Image ${index + 1}`}
-                        style={{ width: 132, height: 132, objectFit: "cover" }}
-                        className="rounded-md"
+                        src={url}
+                        alt={`Preview ${idx + 1}`}
+                        className="w-full h-[132px] object-cover rounded-md"
                       />
                       <button
-                        onClick={() => handleRemoveImage(index)}
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
                         type="button"
+                        onClick={() => handleRemoveImage(idx)}
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
                       >
                         <FaTimes size={16} />
                       </button>
@@ -263,15 +232,12 @@ const UploadProduct = () => {
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div className="mt-6 flex justify-start">
-          <button
-            type="submit"
-            className="w-full md:w-auto py-2 px-4 bg-[#48B1DB] text-white rounded-md transition hover:bg-[#3a9cbf]"
-          >
-            Upload
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="mt-6 w-full md:w-auto py-2 px-4 bg-[#48B1DB] text-white rounded-md hover:bg-[#3a9cbf] transition"
+        >
+          Upload
+        </button>
       </form>
     </section>
   );

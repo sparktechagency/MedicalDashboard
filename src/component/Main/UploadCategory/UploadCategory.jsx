@@ -3,39 +3,28 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { useCreateCategoryMutation } from "../../../redux/features/Category/Category";
 import { message } from "antd";
 
-const MAX_IMAGES = 1;
 const MAX_SIZE_MB = 10;
-const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
+const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg", "image/svg+xml"];
 
 const UploadCategory = () => {
-  const [productCategory, setProductCategory] = useState("");
-  const [profileImages, setProfileImages] = useState([]);
-  const [imageFiles, setImageFiles] = useState([]);
-  const [error, setError] = useState(null); 
-
+  const [category, setCategory] = useState("");
+  const [categoryFile, setCategoryFile] = useState(null); // Image file state
+  const [error, setError] = useState(null);
 
   const [createCategory] = useCreateCategoryMutation();
-  
 
   useEffect(() => {
     return () => {
-      profileImages.forEach((url) => URL.revokeObjectURL(url));
+      if (categoryFile) URL.revokeObjectURL(categoryFile);
     };
-  }, [profileImages]);
+  }, [categoryFile]);
 
   const handleImageUpload = (e) => {
-    const files = e.target.files;
-    if (!files) return;
-
-    if (imageFiles.length + files.length > MAX_IMAGES) {
-      setError(`You can upload only ${MAX_IMAGES} image.`);
-      return;
-    }
-
-    const file = files[0];
+    const file = e.target.files[0];
+    if (!file) return;
 
     if (!VALID_IMAGE_TYPES.includes(file.type)) {
-      setError("Please upload a valid image file (JPG, JPEG, or PNG).");
+      setError("Please upload a valid image file (JPG, JPEG, PNG, or SVG).");
       return;
     }
 
@@ -45,71 +34,82 @@ const UploadCategory = () => {
     }
 
     setError(null);
-    profileImages.forEach((url) => URL.revokeObjectURL(url));
-
-    setProfileImages([URL.createObjectURL(file)]);
-    setImageFiles([file]);
+    setCategoryFile(file); // Store the file itself, not the object URL
   };
 
   const handleRemoveImage = () => {
-    setProfileImages([]);
-    setImageFiles([]);
+    setCategoryFile(null);
     setError(null);
   };
 
-  const handleUpload = async() => {
-    const formData = new FormData();
-    formData.append("name", productCategory);
-    imageFiles.forEach((file) => formData.append("image", file));
-    const res = await createCategory(formData);
-    console.log(res);
-    if(res.data?.code === 201){
-      message.success(res?.data?.message)
+  const handleUpload = async () => {
+    if (!categoryFile) {
+      setError("Please upload a category image.");
+      return;
     }
-    
+
+    const formData = new FormData();
+    formData.append("name", category);
+    formData.append("image", categoryFile); // Append the file object, not URL
+
+    try {
+      const res = await createCategory(formData);
+      console.log(res);
+      if (res?.data?.code === 201) {
+        message.success(res?.data?.message);
+      }
+    } catch (err) {
+      message.error("Failed to upload the category.");
+    }
   };
 
   return (
     <section className="max-w-7xl bg-[#E6F1F8] p-8 rounded-lg shadow-lg mb-11">
-      <h2 className="text-black text-lg font-semibold mb-6 flex items-center gap-2 cursor-pointer select-none">
-        Upload Category
-      </h2>
+      <h2 className="text-black text-lg font-semibold mb-6">Upload Category</h2>
 
-      {/* Product Category */}
-      <label className="block text-[#92BED6] text-xs mb-1">Product Category</label>
+      <label>Category name</label>
       <input
         type="text"
-        value={productCategory}
-        onChange={(e) => setProductCategory(e.target.value)}
-        placeholder="Type product category"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        placeholder="Product Category"
         className="w-full mb-6 p-3 rounded border border-[#8EC9DB] placeholder-[#92BED6] text-sm outline-none focus:ring-2 focus:ring-[#8EC9DB]"
       />
 
-      {/* Product Image Upload */}
-      <label className="block text-[#92BED6] text-xs mb-1">Product image</label>
-
+      <label>Category Image</label>
       <div
         className="w-full h-14 flex items-center justify-center border border-[#8EC9DB] rounded cursor-pointer mb-6 hover:bg-[#d4e6f3]"
-        onClick={() => document.getElementById("imageInput").click()}
+        onClick={() => document.getElementById("categoryInput").click()}
       >
         <input
-          id="imageInput"
+          id="categoryInput"
           type="file"
-          accept="image/jpeg,image/png,image/jpg"
+          accept="image/jpeg,image/png,image/jpg,image/svg+xml"
           className="hidden"
           onChange={handleImageUpload}
         />
         <FaCloudUploadAlt className="text-[#8EC9DB] mr-2" size={18} />
-        <span className="text-[#8EC9DB] text-sm select-none">Upload a image</span>
+        <span className="text-[#8EC9DB] text-sm select-none">Upload category image</span>
       </div>
 
-      {profileImages.length > 0 && (
+      {categoryFile && (
         <div className="mb-4 relative w-28 h-28 rounded overflow-hidden">
-          <img
-            src={profileImages[0]}
-            alt="Uploaded"
-            className="object-cover w-full h-full"
-          />
+          {/* Display SVG directly */}
+          {categoryFile.type === "image/svg+xml" ? (
+            <object
+              type="image/svg+xml"
+              data={URL.createObjectURL(categoryFile)} // Display file directly as SVG
+              className="object-contain w-full h-full"
+            >
+              <p>Your browser does not support SVGs.</p>
+            </object>
+          ) : (
+            <img
+              src={URL.createObjectURL(categoryFile)}
+              alt="Uploaded"
+              className="object-cover w-full h-full"
+            />
+          )}
           <button
             onClick={handleRemoveImage}
             className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
@@ -123,13 +123,12 @@ const UploadCategory = () => {
 
       {error && <p className="text-red-600 text-xs mb-4">{error}</p>}
 
-      {/* Upload Button */}
       <button
         onClick={handleUpload}
         className="py-2 px-6 rounded-md bg-[#48B1DB] text-white text-sm font-semibold hover:bg-[#3a9cbf] transition"
         type="button"
       >
-        Upload
+        Upload 
       </button>
     </section>
   );

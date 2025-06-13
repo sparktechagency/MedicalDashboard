@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useGetProductSingleQuery, useUpdateProductMutation } from "../../../redux/features/ProductManagement/ProductManagement";
 import { imageBaseUrl } from "../../../config/imageBaseUrl";
 import { message } from "antd";
+import { useGetCategoryAllQuery } from "../../../redux/features/Category/Category";
 
 const MAX_IMAGES = 4;
 const MAX_SIZE_MB = 20;
@@ -11,16 +12,27 @@ const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 
 const EditProducts = () => {
   const { id } = useParams();
-  const { data: product } = useGetProductSingleQuery(id);
-  const productData = product?.data?.attributes;
+  
+  const { data } = useGetCategoryAllQuery();
+  const categories = data?.data?.attributes || [];
+
+  const { data: singleData } = useGetProductSingleQuery(id);
+  const productData = singleData?.data?.attributes;
+  console.log(productData);
 
   const [profileImages, setProfileImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [existingImageNames, setExistingImageNames] = useState([]);
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    productTitle: productData?.title,
+    productCategory: productData?.category?._id,  // Ensure category ID is stored
+    productPrice: productData?.price,
+    productDescription: productData?.description,
+    productBidDate: productData?.date,
+  });
 
-  // Preload server-side images
   useEffect(() => {
     if (productData?.images?.length) {
       const urls = productData.images.map((img) => `${imageBaseUrl}/${img}`);
@@ -29,7 +41,6 @@ const EditProducts = () => {
     }
   }, [productData]);
 
-  // Clean up blob URLs
   useEffect(() => {
     return () => {
       profileImages.forEach((url) => {
@@ -92,34 +103,23 @@ const EditProducts = () => {
 
   const handleProductSubmit = async (e) => {
     e.preventDefault();
-    const form = e.target;
+    const { productTitle, productCategory, productPrice, productDescription, productBidDate } = formData;
 
-    const title = form.productTitle.value.trim();
-    const category = form.productCategory.value.trim();
-    const price = form.productPrice.value;
-    const description = form.productDescription.value.trim();
-    const bidDate = form.productBidDate.value;
-
-    if (!title || !category || !price || !description || !bidDate) {
+    if (!productTitle || !productCategory || !productPrice || !productDescription || !productBidDate) {
       setError("All fields are required.");
       return;
     }
 
     const formDataToSend = new FormData();
-    formDataToSend.append("title", title);
-    formDataToSend.append("category", category);
-    formDataToSend.append("price", price);
-    formDataToSend.append("description", description);
-    formDataToSend.append("date", bidDate);
-
-    existingImageNames.forEach((img) => {
-      formDataToSend.append("existingImages", img);
-    });
+    formDataToSend.append("title", productTitle);
+    formDataToSend.append("category", productCategory);
+    formDataToSend.append("price", productPrice);
+    formDataToSend.append("description", productDescription);
+    formDataToSend.append("date", productBidDate);
 
     imageFiles.forEach((file) => {
       formDataToSend.append("image", file);
     });
-
 
     const data = {
       id,
@@ -129,7 +129,7 @@ const EditProducts = () => {
     try {
       setIsSubmitting(true);
       const response = await updateProduct(data).unwrap();
-      console.log(response)
+      console.log(response);
       message.success("Product updated successfully");
     } catch (err) {
       console.error(err);
@@ -139,7 +139,11 @@ const EditProducts = () => {
     }
   };
 
-  if (!productData) return <p>Loading product...</p>;
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+
 
   return (
     <section>
@@ -155,21 +159,28 @@ const EditProducts = () => {
                 <input
                   type="text"
                   name="productTitle"
-                  defaultValue={productData?.title || ""}
+                  value={formData.productTitle}
+                  onChange={handleChange}
                   className="border border-[#48B1DB] p-3 rounded-md"
                   placeholder="Type product title"
                 />
               </div>
 
               <div className="flex flex-col my-2">
-                <label className="text-gray-600">Product Category</label>
-                <input
-                  type="text"
+                <label className="block text-gray-600 mt-4 mb-1">Product Category</label>
+                <select
                   name="productCategory"
-                  defaultValue={productData?.category?.name || ""}
-                  className="border border-[#48B1DB] p-3 rounded-md"
-                  placeholder="Type product category"
-                />
+                  value={formData.productCategory}
+                  onChange={handleChange}
+                  className="w-full border border-[#48B1DB] p-3 rounded-md"
+                >
+                  <option value="">Select category</option>
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="flex flex-col my-2">
@@ -177,7 +188,8 @@ const EditProducts = () => {
                 <input
                   type="number"
                   name="productPrice"
-                  defaultValue={productData?.price || ""}
+                  value={formData.productPrice}
+                  onChange={handleChange}
                   className="border border-[#48B1DB] p-3 rounded-md"
                   placeholder="Type product price"
                 />
@@ -187,7 +199,8 @@ const EditProducts = () => {
                 <label className="text-gray-600">Product Description</label>
                 <textarea
                   name="productDescription"
-                  defaultValue={productData?.description || ""}
+                  value={formData.productDescription}
+                  onChange={handleChange}
                   className="border border-[#48B1DB] p-3 rounded-md"
                   placeholder="Type product description"
                 />
@@ -201,11 +214,12 @@ const EditProducts = () => {
                 <input
                   type="date"
                   name="productBidDate"
-                  defaultValue={
+                  value={
                     productData?.date
-                      ? new Date(productData.date).toISOString().split("T")[0]
+                      ? new Date(productData.date).toISOString().split("T")[0] // Format the date as YYYY-MM-DD
                       : ""
                   }
+                  onChange={handleChange}
                   className="border border-[#48B1DB] p-3 rounded-md"
                 />
               </div>
@@ -259,9 +273,7 @@ const EditProducts = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full md:w-auto py-2 px-4 text-white rounded-md ${
-                isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#48B1DB] hover:bg-[#3a9cbf]"
-              }`}
+              className={`w-full md:w-auto py-2 px-4 text-white rounded-md ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#48B1DB] hover:bg-[#3a9cbf]"}`}
             >
               {isSubmitting ? "Updating..." : "Upload"}
             </button>

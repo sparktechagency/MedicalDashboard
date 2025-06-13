@@ -26,12 +26,12 @@ import EarningsPage from "../page/EarningsPage/EarningsPage";
 import ReportsPage from "../page/ReportsPage/ReportsPage";
 import UserAgreement from "../page/UserAgreement/UserAgreement";
 import EditUserAgreement from "../page/EditUserAgreement/EditUserAgreement";
-import UploadProductPage from "../page/UploadProductPage/UploadProductPage";
 import AllProductsPage from "../page/AllProductsPage/AllProductsPage";
 import EidtProductsPage from "../page/EidtProductsPage/EidtProductsPage";
 import EditUploadCategoryPage from "../page/EditUploadCategoryPage/EditUploadCategoryPage";
 import AllCategoryPage from "../page/AllCategoryPage/AllCategoryPage";
 import MessagePage from "../page/MessagePage/MessagePage";
+import ProductCategory from "../component/Main/ProductCategory/ProductCategory";
 
 const router = createBrowserRouter([
   {
@@ -81,7 +81,7 @@ const router = createBrowserRouter([
       },
       {
         path: "UploadProduct",
-        element: <UploadProductPage />,
+        element: <ProductCategory />,
       },
       {
         path: "AllProducts/:id",
