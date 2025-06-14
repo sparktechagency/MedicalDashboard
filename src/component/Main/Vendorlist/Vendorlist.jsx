@@ -1,96 +1,30 @@
 import { useState } from "react";
-import { Table, ConfigProvider, Space, Button, Select } from "antd";
+import { Table, ConfigProvider, Space, Button } from "antd";
 import { AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useGetAllVendorQuery } from "../../../redux/features/Vendor/Vendor";
+import moment from "moment";
+import { imageBaseUrl } from "../../../config/imageBaseUrl";
 
 const Vendorlist = () => {
+  const { data } = useGetAllVendorQuery({ role: "seller" });
+
+ 
+  const dataSource =
+    data?.data?.attributes?.results.map((user, index) => ({
+      key: user.id, 
+      sl: String(index + 1),
+      userName: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      createdAt: moment(user.createdAt).format("YYYY-MM-DD"), // Format date
+      currentBalance: user.currentBalance,
+      totalIncome: user.totalIncome,
+      userImage: user.image,
+    })) || []; 
+
   
-  const {data} = useGetAllVendorQuery({role:"seller"})
-  console.log(data);
-
-  // Example dataSource
-  const dataSource = [
-    {
-      key: "1",
-      sl: "01",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "11 Oct 24, 11:10 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    // Add more items here
-  ];
-
-  const handleFilterChange = (value) => {
-    setFilter(value);
-  };
-
-  const showModal = (user) => {
-    setSelectedUser(user);
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setSelectedUser(null);
-  };
-
   const columns = [
     {
       title: "#SL",
@@ -105,9 +39,7 @@ const Vendorlist = () => {
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-300">
             <img
-              src={
-                record.userImage || "https://i.ibb.co/0C5x0zk/Ellipse-1232.png"
-              }
+              src={`${imageBaseUrl}/${record.userImage}`}
               alt={record.userName}
               className="w-full h-full object-cover"
             />
@@ -127,9 +59,24 @@ const Vendorlist = () => {
       key: "phone",
     },
     {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
       title: "Time & Date",
-      dataIndex: "timeAndDate",
-      key: "timeAndDate",
+      dataIndex: "createdAt",
+      key: "createdAt",
+    },
+    {
+      title: "Current Balance",
+      dataIndex: "currentBalance",
+      key: "currentBalance",
+    },
+    {
+      title: "Total Income",
+      dataIndex: "totalIncome",
+      key: "totalIncome",
     },
     {
       title: "Actions",
@@ -140,7 +87,7 @@ const Vendorlist = () => {
             <Button
               className="bg-[#48B1DB] text-white"
               icon={<AiFillEye size={20} />}
-            ></Button>
+            />
           </Link>
         </Space>
       ),
@@ -148,7 +95,7 @@ const Vendorlist = () => {
   ];
 
   return (
-    <div className="w-full rounded-lg ">
+    <div className="w-full rounded-lg">
       {/* Header with Filter */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold text-xl">Vendor list</h2>
@@ -172,7 +119,7 @@ const Vendorlist = () => {
       >
         <Table
           columns={columns}
-          dataSource={dataSource}
+          dataSource={dataSource} 
           pagination={{
             pageSize: 5,
           }}

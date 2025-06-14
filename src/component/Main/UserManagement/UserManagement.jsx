@@ -72,6 +72,7 @@ const UserManagement = () => {
       dataIndex: "createdAt",
       key: "createdAt",
     },
+    
     {
       title: "Actions",
       key: "actions",
