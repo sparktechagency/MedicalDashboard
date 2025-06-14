@@ -7,6 +7,7 @@ import {
 import { useParams } from "react-router-dom";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
+import { imageBaseUrl } from "../../../config/imageBaseUrl";
 
 const MAX_SIZE_MB = 5;
 const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
@@ -110,7 +111,7 @@ const EditUploadCategory = () => {
         <div className="mb-4 relative w-28 h-28 rounded overflow-hidden">
           <img
             ref={previewRef}
-            src={category?.image || ""}
+            src={`${imageBaseUrl}/${category?.image}` || ""}  
             alt="Preview"
             className="object-cover w-full h-full"
           />

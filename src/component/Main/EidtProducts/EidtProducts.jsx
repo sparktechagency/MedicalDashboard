@@ -12,20 +12,20 @@ const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 
 const EditProducts = () => {
   const { id } = useParams();
-  
+  console.log(id)
+
   const { data } = useGetCategoryAllQuery();
   const categories = data?.data?.attributes || [];
 
   const { data: singleData } = useGetProductSingleQuery(id);
   const productData = singleData?.data?.attributes;
-  console.log(productData);
+
+  const [updateProduct] = useUpdateProductMutation();
 
   const [profileImages, setProfileImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [existingImageNames, setExistingImageNames] = useState([]);
   const [error, setError] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     if (productData?.images?.length) {
@@ -93,16 +93,14 @@ const EditProducts = () => {
     setError(null);
   };
 
-  const [updateProduct] = useUpdateProductMutation();
-
   const handleProductSubmit = async (e) => {
     e.preventDefault();
-    const { productTitle, productCategory, productPrice, productDescription, productBidDate } = formData;
-
-    if (!productTitle || !productCategory || !productPrice || !productDescription || !productBidDate) {
-      setError("All fields are required.");
-      return;
-    }
+    const form = e.target;
+    const productTitle = form.productTitle.value;
+    const productCategory = form.productCategory.value;
+    const productPrice = form.productPrice.value;
+    const productDescription = form.productDescription.value;
+    const productBidDate = form.productBidDate.value;
 
     const formDataToSend = new FormData();
     formDataToSend.append("title", productTitle);
@@ -111,33 +109,23 @@ const EditProducts = () => {
     formDataToSend.append("description", productDescription);
     formDataToSend.append("date", productBidDate);
 
-    imageFiles.forEach((file) => {
-      formDataToSend.append("image", file);
+    // if image new upload kore tahole append korben
+    // are jodi na kore tahole skip korben this condtion add korte hobe
+
+    imageFiles.forEach((productImage) => {
+      formDataToSend.append("image", productImage);
     });
 
-    const data = {
-      id,
-      data: formDataToSend,
-    };
+    const data = formDataToSend;
 
     try {
-      setIsSubmitting(true);
-      const response = await updateProduct(data).unwrap();
+      const response = await updateProduct({ id, data }).unwrap();
       console.log(response);
       message.success("Product updated successfully");
     } catch (err) {
-      console.error(err);
       message.error("Failed to update product");
-    } finally {
-      setIsSubmitting(false);
     }
   };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-
 
   return (
     <section>
@@ -153,8 +141,7 @@ const EditProducts = () => {
                 <input
                   type="text"
                   name="productTitle"
-                  value={productData?.title}
-                  onChange={handleChange}
+                  defaultValue={productData?.title}
                   className="border border-[#48B1DB] p-3 rounded-md"
                   placeholder="Type product title"
                 />
@@ -164,11 +151,10 @@ const EditProducts = () => {
                 <label className="block text-gray-600 mt-4 mb-1">Product Category</label>
                 <select
                   name="productCategory"
-                  value={productData?.category?._id}
-                  onChange={handleChange}
+                  defaultValue={productData?.category?._id}
                   className="w-full border border-[#48B1DB] p-3 rounded-md"
                 >
-                  <option value="">Select category</option>
+                  <option value="">{productData?.category?.name}</option>
                   {categories.map((cat) => (
                     <option key={cat._id} value={cat._id}>
                       {cat.name}
@@ -182,8 +168,7 @@ const EditProducts = () => {
                 <input
                   type="number"
                   name="productPrice"
-                  value={productData?.price}
-                  onChange={handleChange}
+                  defaultValue={productData?.price}
                   className="border border-[#48B1DB] p-3 rounded-md"
                   placeholder="Type product price"
                 />
@@ -193,8 +178,7 @@ const EditProducts = () => {
                 <label className="text-gray-600">Product Description</label>
                 <textarea
                   name="productDescription"
-                  value={productData?.description}
-                  onChange={handleChange}
+                  defaultValue={productData?.description}
                   className="border border-[#48B1DB] p-3 rounded-md"
                   placeholder="Type product description"
                 />
@@ -208,12 +192,11 @@ const EditProducts = () => {
                 <input
                   type="date"
                   name="productBidDate"
-                  value={
+                  defaultValue={
                     productData?.date
                       ? new Date(productData.date).toISOString().split("T")[0] // Format the date as YYYY-MM-DD
                       : ""
                   }
-                  onChange={handleChange}
                   className="border border-[#48B1DB] p-3 rounded-md"
                 />
               </div>
@@ -266,10 +249,9 @@ const EditProducts = () => {
           <div className="mt-6 flex justify-start">
             <button
               type="submit"
-              disabled={isSubmitting}
-              className={`w-full md:w-auto py-2 px-4 text-white rounded-md ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#48B1DB] hover:bg-[#3a9cbf]"}`}
+              className="w-full md:w-auto py-2 px-4 text-white rounded-md bg-[#48B1DB] hover:bg-[#3a9cbf]"
             >
-              {isSubmitting ? "Updating..." : "Upload"}
+              Upload
             </button>
           </div>
         </form>
