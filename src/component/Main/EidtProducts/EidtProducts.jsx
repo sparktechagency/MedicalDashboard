@@ -12,7 +12,7 @@ const VALID_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 
 const EditProducts = () => {
   const { id } = useParams();
-  console.log(id)
+  console.log(id);
 
   const { data } = useGetCategoryAllQuery();
   const categories = data?.data?.attributes || [];
@@ -109,12 +109,12 @@ const EditProducts = () => {
     formDataToSend.append("description", productDescription);
     formDataToSend.append("date", productBidDate);
 
-    // if image new upload kore tahole append korben
-    // are jodi na kore tahole skip korben this condtion add korte hobe
-
-    imageFiles.forEach((productImage) => {
-      formDataToSend.append("image", productImage);
-    });
+    // Only append new images if there are any
+    if (imageFiles.length > 0) {
+      imageFiles.forEach((productImage) => {
+        formDataToSend.append("image", productImage);
+      });
+    }
 
     const data = formDataToSend;
 
@@ -192,11 +192,7 @@ const EditProducts = () => {
                 <input
                   type="date"
                   name="productBidDate"
-                  defaultValue={
-                    productData?.date
-                      ? new Date(productData.date).toISOString().split("T")[0] // Format the date as YYYY-MM-DD
-                      : ""
-                  }
+                  defaultValue={productData?.date ? new Date(productData.date).toISOString().split("T")[0] : ""}
                   className="border border-[#48B1DB] p-3 rounded-md"
                 />
               </div>

@@ -26,19 +26,6 @@ const VendorRequest = () => {
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
           Product Request List
         </h1>
-        {/* <div className="flex items-center bg-blue-100 p-2 rounded w-full sm:w-auto max-w-xs lg:max-w-xs">
-          <label htmlFor="filter" className="mr-2 text-sm lg:text-base">
-            Filter:
-          </label>
-          <select
-            id="filter"
-            className="p-1.5 rounded bg-blue-100 text-sm lg:text-base w-full"
-          >
-            <option value="month">Month</option>
-            <option value="week">Week</option>
-            <option value="year">Year</option>
-          </select>
-        </div> */}
       </div>
 
       <div className="space-y-4 lg:space-y-6">

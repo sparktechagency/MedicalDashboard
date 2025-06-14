@@ -1,4 +1,5 @@
 const VendorRequestsDetails = () => {
+  
   return (
     <div>
       <div className="w-full col-span-full md:col-span-6 rounded-lg bg-[#EEF9FE] p-5">
