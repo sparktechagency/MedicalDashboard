@@ -1,99 +1,131 @@
+import { Navigate, useParams } from "react-router-dom";
+import { useGetProductSinglesQuery, useUpdateApproveProductMutation, useUpdatedeclineProductMutation } from "../../../redux/features/VendorRequests/VendorRequests";
+import moment from "moment/moment";
+import { imageBaseUrl } from "../../../config/imageBaseUrl";
+import { message } from "antd";
+
 const VendorRequestsDetails = () => {
+  const { id } = useParams();
+  const { data } = useGetProductSinglesQuery(id);
+  const product = data?.data;
   
+  const [UpdatedeclineProduct] = useUpdatedeclineProductMutation();
+  const [UpdateApproveProduct] = useUpdateApproveProductMutation();
+
+  // Fix: Using the Navigate component correctly.
+  const navigate = useNavigate();
+
+  const handleDeclineProduct = async (id) => {
+    try {
+      const res = await UpdatedeclineProduct(id).unwrap();
+      if (res.code === 200) {
+        message.success("Product declined successfully");
+        navigate("/vendorRequest");
+      }
+    } catch (error) {
+      console.error("Failed to decline product:", error);
+    }
+  };
+
+  const handleAproveProduct = async (id) => {
+    try {
+      const res = await UpdateApproveProduct(id).unwrap();
+      if (res.code === 200) {
+        message.success("Product approved successfully");
+        navigate("/vendorRequest");
+      }
+    } catch (error) {
+      console.error("Failed to approve product:", error);
+    }
+  };
+
   return (
     <div>
       <div className="w-full col-span-full md:col-span-6 rounded-lg bg-[#EEF9FE] p-5">
         {/* Vendor Details */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
           {/* Left Content */}
           <div className="flex-1">
-            <div className="flex space-x-4 items-center">
-              <div className="w-24 h-24 rounded-full overflow-hidden bg-white cursor-pointer">
-                {/* Replace with actual image */}
+            <div className="flex space-x-2 md:space-x-4 items-center">
+              <div className="w-auto overflow-hidden cursor-pointer">
                 <img
-                  onClick={() => showModal(dataSource[0])}
-                  src="/path_to_image/your_image.jpg"
+                  src={`${imageBaseUrl}/${product?.attributes?.author?.image}`}
                   alt="Vendor"
-                  className="w-full h-full object-cover"
+                  className="w-16 h-16 md:w-24 md:h-24 rounded-full object-cover"
                 />
               </div>
-              <div>
-                <h2
-                  className="font-semibold text-xl cursor-pointer hover:underline"
-                  // Clicking the name will open modal with first product's data
-                >
-                  Hisham Islam
+              <div className="flex flex-col w-full">
+                <h2 className="font-semibold text-xl cursor-pointer hover:underline">
+                  {product?.attributes?.author?.name}
                 </h2>
-                <p className="text-gray-700">Location: New York, US</p>
+                <p className="text-gray-700">
+                  Location: {product?.attributes?.author?.address || "Unknown"}
+                </p>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-5 py-4 text-sm md:text-base">
               <p className="font-semibold min-w-[150px]">
-                Product Name: <br />{" "}
-                <span className="text-gray-700 font-normal">GE Vivid S70</span>
-              </p>
-              <p className="font-semibold min-w-[150px]">
-                Product Category: <br />{" "}
+                Product Name: <br />
                 <span className="text-gray-700 font-normal">
-                  Diagnostic Equipment
+                  {product?.attributes?.title}
                 </span>
               </p>
               <p className="font-semibold min-w-[150px]">
-                Bid Price: <br />{" "}
-                <span className="text-gray-700 font-normal">$200</span>
+                Product Category: <br />
+                <span className="text-gray-700 font-normal">
+                  {product?.attributes?.category?.name}
+                </span>
               </p>
-            </div>
-
-            <div className="flex flex-wrap gap-10 py-2 text-sm md:text-base">
-              <div>
-                <h1 className="font-semibold">
-                  Time <br />{" "}
-                  <span className="text-gray-700 font-normal">
-                    11 Oct 24, 11:10 PM
-                  </span>
-                </h1>
-              </div>
-              <div>
-                <h1 className="font-semibold">
-                  Product list <br />{" "}
-                  <span className="text-gray-700 font-normal">200</span>
-                </h1>
-              </div>
+              <p className="font-semibold min-w-[150px]">
+                Bid Price: <br />
+                <span className="text-gray-700 font-normal">
+                  ${product?.attributes?.price}
+                </span>
+              </p>
+              <p className="font-semibold min-w-[150px]">
+                Time <br />
+                <span className="text-gray-700 font-normal">
+                  {moment(product?.attributes?.date).format('MMMM Do YYYY')}
+                </span>
+              </p>
+              <p className="font-semibold min-w-[150px]">
+                Product list <br />
+                <span className="text-gray-700 font-normal">
+                  {product?.attributes?.images?.length || 0}
+                </span>
+              </p>
             </div>
           </div>
 
           {/* Right Image */}
           <div className="w-full md:w-[30%] flex justify-center md:justify-end">
             <img
-              src="https://i.ibb.co/bjzn3zKW/Rectangle-3.png"
+              src={`${imageBaseUrl}/${product?.attributes?.images?.[0]}`}
               alt="Product"
-              className="max-w-full h-auto rounded-md"
+              className="max-w-full h-[300px] rounded-md"
             />
           </div>
         </div>
 
-        <div className="py-3 text-sm md:text-base">
+        <div className="xl:-mt-10 lg:-mt-2 -mt-0 pt-8 md:py-0 text-sm md:text-base">
           <h3 className="font-semibold mb-1">Product Details</h3>
           <p className="text-gray-600 leading-relaxed">
-            Advanced cardiovascular ultrasound system with crystal-clear imaging
-            and intuitive workflow. Combines high performance with portability
-            for efficient diagnostics anytime, anywhere.
+            {product?.attributes?.description}
           </p>
         </div>
       </div>
 
       <div className="flex justify-end space-x-4 mt-5">
-        <button className="bg-[#48B1DB] text-white px-5 py-2  rounded-md">
+        <button onClick={() => handleAproveProduct(id)} className="bg-[#48B1DB] text-white px-5 py-2 rounded-md">
           Approve
         </button>
-        <button className="bg-[#EEF9FE] border border-[#48B1DB] text-black px-5 py-2 rounded-md">
+        <button onClick={() => handleDeclineProduct(id)} className="bg-[#EEF9FE] border border-[#48B1DB] text-black px-5 py-2 rounded-md">
           Decline
         </button>
       </div>
     </div>
   );
-  rounded - md;
 };
 
 export default VendorRequestsDetails;

@@ -2,14 +2,6 @@ import { baseApi } from "../../baseApi/baseApi";
 
 const VendorRequests = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    createCategory: builder.mutation({
-      query: (data) => ({
-        url: `/category`,
-        method: "POST",
-        body: data,
-      }),
-      invalidatesTags: ["product"],
-    }),
     getProductRequestAll: builder.query({
       query: () => ({
         url: `/product/request`,
@@ -17,18 +9,23 @@ const VendorRequests = baseApi.injectEndpoints({
       }),
       providesTags: ["product"]
     }),
-    getProductSingle: builder.query({
+    getProductSingles: builder.query({
       query: (id) => ({
         url: `/product/single/${id}`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: ["product"]
+      providesTags: ['product'],
     }),
-    UpdateProduct: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `/product/${id}`,
+    UpdatedeclineProduct: builder.mutation({
+      query: (id) => ({
+        url: `/product/decline/${id}`,
         method: "PATCH",
-        body: data,
+      }),
+    }),
+    UpdateApproveProduct: builder.mutation({
+      query: (id) => ({
+        url: `/product/approve/${id}`,
+        method: "PATCH",
       }),
     }),
     deleteCategory: builder.mutation({
@@ -42,5 +39,8 @@ const VendorRequests = baseApi.injectEndpoints({
 });
 
 export const { 
-    useGetProductRequestAllQuery
+    useGetProductRequestAllQuery,
+    useGetProductSinglesQuery,
+    useUpdatedeclineProductMutation,
+    useUpdateApproveProductMutation,
 } = VendorRequests;
