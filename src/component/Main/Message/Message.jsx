@@ -2,10 +2,15 @@ import { useState } from "react";
 import { Table, ConfigProvider, Space, Button, Select, Modal } from "antd";
 import { AiFillEye } from "react-icons/ai";
 import { FaEye } from "react-icons/fa";
+import { useGetAllMessageQuery } from "../../../redux/features/message/message";
 
 const Message = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
+
+  const {data} = useGetAllMessageQuery();
+  const alldata = data?.data?.attributes || [];
+  
 
   const dataSource = [
     {
