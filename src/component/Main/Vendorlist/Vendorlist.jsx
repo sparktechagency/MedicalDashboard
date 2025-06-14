@@ -2,9 +2,12 @@ import { useState } from "react";
 import { Table, ConfigProvider, Space, Button, Select } from "antd";
 import { AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { useGetAllVendorQuery } from "../../../redux/features/Vendor/Vendor";
 
 const Vendorlist = () => {
-  const [filter, setFilter] = useState("Month");
+  
+  const {data} = useGetAllVendorQuery({role:"seller"})
+  console.log(data);
 
   // Example dataSource
   const dataSource = [
@@ -149,16 +152,6 @@ const Vendorlist = () => {
       {/* Header with Filter */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold text-xl">Vendor list</h2>
-        <Select
-          value={filter}
-          onChange={handleFilterChange}
-          options={[
-            { value: "Month", label: "Filter: Month" },
-            { value: "Week", label: "Filter: Week" },
-            { value: "Year", label: "Filter: Year" },
-          ]}
-          className="w-32"
-        />
       </div>
 
       {/* User Table */}

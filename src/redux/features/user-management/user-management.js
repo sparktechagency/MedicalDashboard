@@ -2,42 +2,25 @@ import { baseApi } from "../../baseApi/baseApi";
 
 const userManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUsers: builder.query({
-      query: () => ({
-        url: `/admin/users/all`,
+    getAllUser: builder.query({
+      query: ({ role, limit, page  }) => ({
+        url: `/users/all?role=${role}&limit=${limit}&page=${page}`,
         method: "GET",
       }),
       providesTags: ["user"],
     }),
-    UpdateUserManagement: builder.mutation({
+    getAllbidUser: builder.query({
       query: (id) => ({
-        url: `/admin/v2/ban-user/${id}`,
-        method: "PATCH",
+        url: `/bid/user/${id}`,
+        method: "GET",
       }),
-      invalidatesTags: ["user"],
+      providesTags: ["user"],
     }),
-    UpdateUserUnblock: builder.mutation({
-      query: (id) => ({
-        url: `/admin/v2/unban-user/${id}`,
-        method: "PATCH",
-      }),
-      invalidatesTags: ["user"],
-    }),
-    deleteUser: builder.mutation({
-      query: (data) => ({
-        url: "/admin/user/remove",
-        method: "POST",
-        body:data
-      }),
-      invalidatesTags: ["user"],
-    }),
+   
   }),
 });
 
 export const {
-  useGetAllUsersQuery,
-  useGetUserSearchQuery,
-  useUpdateUserManagementMutation,
-  useUpdateUserUnblockMutation,
-  useDeleteUserMutation
+  useGetAllUserQuery,
+  useGetAllbidUserQuery
 } = userManagementApi;

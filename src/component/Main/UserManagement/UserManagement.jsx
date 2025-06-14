@@ -1,93 +1,34 @@
-import { useState } from "react";
-import { Table, ConfigProvider, Space, Button, Select } from "antd";
+
+import { Table, ConfigProvider, Space, Button } from "antd";
 import { AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import moment from "moment/moment";
+import { useGetAllUserQuery } from "../../../redux/features/user-management/user-management";
+import { imageBaseUrl } from "../../../config/imageBaseUrl";
+
 
 const UserManagement = () => {
-  const [filter, setFilter] = useState("Month");
+  const { data, error, isLoading } = useGetAllUserQuery({ role: "user", limit: 10, page: 1 });
 
-  // Example dataSource
-  const dataSource = [
-    {
-      key: "1",
-      sl: "01",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "11 Oct 24, 11:10 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "SupportInfo@Gmail.Com",
-      phone: "999-888-666",
-      timeAndDate: "12 Oct 24, 12:20 PM",
-      userImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png", // User image URL
-    },
-    // Add more items here
-  ];
+  // Define loading and error states for handling API data
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading users!</div>;
 
-  const handleFilterChange = (value) => {
-    setFilter(value);
-  };
+  // Dynamically mapping data from the API response
+  const dataSource = data?.data?.attributes?.results.map((user, index) => ({
+    key: user.id, // Unique key for each user (using 'id' from the API response)
+    sl: String(index + 1), // Serial number
+    userName: user.name,
+    email: user.email,
+    phone: user.phone,
+    address: user.address,
+    createdAt: moment(user.createdAt).format("YYYY-MM-DD"), 
+    currentBalance: user.currentBalance,
+    totalIncome: user.totalIncome,
+    userImage: user.image , 
+  })) || []; 
 
-  const showModal = (user) => {
-    setSelectedUser(user);
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setSelectedUser(null);
-  };
-
+  // Columns for the Ant Design Table
   const columns = [
     {
       title: "#SL",
@@ -102,9 +43,7 @@ const UserManagement = () => {
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-300">
             <img
-              src={
-                record.userImage || "https://i.ibb.co/0C5x0zk/Ellipse-1232.png"
-              }
+              src={`${imageBaseUrl}/${record.userImage}`}
               alt={record.userName}
               className="w-full h-full object-cover"
             />
@@ -124,9 +63,14 @@ const UserManagement = () => {
       key: "phone",
     },
     {
-      title: "Time & Date",
-      dataIndex: "timeAndDate",
-      key: "timeAndDate",
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "Created At",
+      dataIndex: "createdAt",
+      key: "createdAt",
     },
     {
       title: "Actions",
@@ -145,49 +89,40 @@ const UserManagement = () => {
   ];
 
   return (
-    <div className="w-full rounded-lg ">
+    <div className="w-full rounded-lg">
       {/* Header with Filter */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold text-xl">User List</h2>
-        <Select
-          value={filter}
-          onChange={handleFilterChange}
-          options={[
-            { value: "Month", label: "Filter: Month" },
-            { value: "Week", label: "Filter: Week" },
-            { value: "Year", label: "Filter: Year" },
-          ]}
-          className="w-32"
-        />
       </div>
 
-     <div>
-       {/* User Table */}
-      <ConfigProvider
-        theme={{
-          token: {
-            colorBgContainer: "#EEF9FE",
-            colorPrimary: "#1890ff",
-          },
-          components: {
-            Table: {
-              headerBg: "#48B1DB",
-              headerColor: "#000000",
-              headerBorderRadius: 2,
+      <div>
+        {/* User Table */}
+        <ConfigProvider
+          theme={{
+            token: {
+              colorBgContainer: "#EEF9FE",
+              colorPrimary: "#1890ff",
             },
-          },
-        }}
-      >
-        <Table
-          columns={columns}
-          dataSource={dataSource}
-          pagination={{
-            pageSize: 5,
+            components: {
+              Table: {
+                headerBg: "#48B1DB",
+                headerColor: "#000000",
+                headerBorderRadius: 2,
+              },
+            },
           }}
-          scroll={{ x: 1000 }}
-        />
-      </ConfigProvider>
-     </div>
+        >
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            pagination={{
+              pageSize: 5,
+            }}
+            scroll={{ x: 1000 }}
+            rowKey="key"
+          />
+        </ConfigProvider>
+      </div>
     </div>
   );
 };
