@@ -1,20 +1,20 @@
 import { useState } from "react";
-import { Table, ConfigProvider, Space, Button, Modal } from "antd";
+import { Table, ConfigProvider, Space, Button, Modal, message } from "antd";
 import { FaEye } from "react-icons/fa";
-import moment from "moment";  // Import moment.js
+import moment from "moment"; 
 import { useGetAllMessageQuery, useUpdateMessageMutation } from "../../../redux/features/message/message";
 
 const Message = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
+  console.log(selectedMessage?._id);
 
 
-
-
-  const { data } = useGetAllMessageQuery();
+  // Fetch messages from the API
+  const { data, refetch } = useGetAllMessageQuery();
   const alldata = data?.data?.attributes || [];
 
-  // Mapping the API data to the dataSource for the table
+  // Map the API data to the dataSource for the table
   const dataSource = alldata.map((message, index) => ({
     key: message._id,
     sl: (index + 1).toString().padStart(2, "0"),
@@ -22,32 +22,40 @@ const Message = () => {
     email: message.email,
     phone: message.phone,
     time: moment(message.createdAt).format("YYYY-MM-DD"), 
-    userImage: message.userImage,
+    userImage: message.userImage, 
     message: message.message,
+    isRead: message.isRead, 
   }));
-
-
 
   const [UpdateMessage] = useUpdateMessageMutation();
 
-  const handleUpdate = async (id, data) => {
+  // Handle message update (mark as read/unread)
+  const handleUpdate = async (id) => {
     try {
-      await UpdateMessage({ id, data }).unwrap();
-      console.log("Message updated successfully!");
+    
+      const res = await UpdateMessage(id)
+      if (res.code === 200) {
+        message.success("Message updated successfully");
+        refetch(); 
+      }
     } catch (error) {
       console.error("Error updating message:", error);
+      message.error("Error updating message");
     }
   };
+
 
   const showModal = (record) => {
     setSelectedMessage(record);
     setModalVisible(true);
   };
 
+  // Close the modal
   const handleModalClose = () => {
     setModalVisible(false);
     setSelectedMessage(null);
   };
+
 
   const columns = [
     {
@@ -86,7 +94,7 @@ const Message = () => {
       render: (_, record) => (
         <Space size="middle">
           <Button
-            onClick={() => showModal(record)}
+            onClick={() => showModal(record)} // Open modal on button click
             className="bg-[#48B1DB] text-white hover:bg-[#3399cc] border-none"
             icon={<FaEye size={20} />}
             shape="circle"
@@ -119,7 +127,7 @@ const Message = () => {
       >
         <Table
           columns={columns}
-          dataSource={dataSource}  // Dynamically use the mapped data
+          dataSource={dataSource}  
           pagination={{
             pageSize: 9,
             showSizeChanger: false,
@@ -137,7 +145,7 @@ const Message = () => {
             key="read"
             type="primary"
             onClick={() => {
-              // You can add your "Read" logic here
+              // handleUpdate(id); 
               handleModalClose();
             }}
             style={{ backgroundColor: "#48B1DB", borderColor: "#48B1DB" }}
@@ -147,7 +155,7 @@ const Message = () => {
           <Button
             key="unread"
             onClick={() => {
-              // You can add your "Unread" logic here
+              // handleUpdate(id); 
               handleModalClose();
             }}
             style={{
@@ -160,7 +168,6 @@ const Message = () => {
           </Button>,
         ]}
         centered
-        bodyStyle={{ borderRadius: "16px", padding: "20px" }}
         style={{ borderRadius: "16px" }}
         width={360}
         title={<h3 className="font-semibold text-lg">Message</h3>}

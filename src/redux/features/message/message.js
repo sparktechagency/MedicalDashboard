@@ -10,10 +10,9 @@ const MessageManagementApi = baseApi.injectEndpoints({
       providesTags: ["user"],
     }),
     UpdateMessage: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `/contact/${id}`,
+      query: ({ id }) => ({
+        url: `/contact/read/${id}`,
         method: "PATCH",
-        body: data,
       }),
     }),
    
