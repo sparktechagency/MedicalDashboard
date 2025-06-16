@@ -21,15 +21,25 @@ const Report = baseApi.injectEndpoints({
     getSingleReport: builder.query(
       {
         query: (id) => ({
-          url: `/info/report-detels/${id}`,
+          url: `/report/single/${id}`,
           method: "GET"
         })
       }
     ),
+
+    deleteReport: builder.mutation({
+      query: (id) => ({
+        url: `/report/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["report"],
+    }),
   
   }),
 });
 
 export const {
     useGetAllReportQuery,
+    useGetSingleReportQuery,
+    useDeleteReportMutation,
 } = Report;

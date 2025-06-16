@@ -32,6 +32,7 @@ import EditUploadCategoryPage from "../page/EditUploadCategoryPage/EditUploadCat
 import AllCategoryPage from "../page/AllCategoryPage/AllCategoryPage";
 import MessagePage from "../page/MessagePage/MessagePage";
 import ProductCategory from "../component/Main/ProductCategory/ProductCategory";
+import ReportsDetailPage from "../page/ReportsDetailPage/ReportsDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -110,6 +111,10 @@ const router = createBrowserRouter([
       {
         path: "Reports",
         element: <ReportsPage />,
+      },
+      {
+        path: "Reports/:id",
+        element: <ReportsDetailPage />,
       },
       {
         path: "/notification",
