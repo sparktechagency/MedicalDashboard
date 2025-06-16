@@ -2,6 +2,13 @@ import { baseApi } from "../../baseApi/baseApi";
 
 const Report = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getAllReport: builder.query({
+      query: () => ({
+        url: "/report/all",
+        method: "GET",
+      }),
+      providesTags:["report"],
+    }),
     updateReport: builder.mutation({
       query: (data) => ({
         url: "/info/all-reports",
@@ -10,14 +17,8 @@ const Report = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["report"],
     }),
-    getAllReport: builder.query({
-      query: () => ({
-        url: "/info/all-reports",
-        method: "GET",
-      }),
-      providesTags:["report"],
-    }),
-    getSingleContentModeration: builder.query(
+    
+    getSingleReport: builder.query(
       {
         query: (id) => ({
           url: `/info/report-detels/${id}`,
@@ -25,28 +26,10 @@ const Report = baseApi.injectEndpoints({
         })
       }
     ),
-    deleteReport: builder.mutation({
-      query: (data) => ({
-        url: '/info/delete-report-image',
-        method: 'DELETE',
-        body: data,
-      }),
-    }),
-    DeclientReport: builder.mutation({
-      query: (data) => ({
-        url: "/info/decline-report",
-        method: "POST",
-        body: data,
-      }),
-      invalidatesTags: ["report"],
-    }),
+  
   }),
 });
 
 export const {
     useGetAllReportQuery,
-    useUpdateReportMutation,
-    useGetSingleContentModerationQuery,
-    useDeleteReportMutation,
-    useDeclientReportMutation,
 } = Report;
