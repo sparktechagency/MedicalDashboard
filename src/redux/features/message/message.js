@@ -9,12 +9,12 @@ const MessageManagementApi = baseApi.injectEndpoints({
       }),
       providesTags: ["user"],
     }),
-    getAllbidMessage: builder.query({
-      query: (id) => ({
-        url: `/product/seller/${id}`,
-        method: "GET",
+    UpdateMessage: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/contact/${id}`,
+        method: "PATCH",
+        body: data,
       }),
-      providesTags: ["user"],
     }),
    
   }),
@@ -22,5 +22,5 @@ const MessageManagementApi = baseApi.injectEndpoints({
 
 export const {
   useGetAllMessageQuery,
-  useGetAllbidMessageQuery
+  useUpdateMessageMutation
 } = MessageManagementApi;

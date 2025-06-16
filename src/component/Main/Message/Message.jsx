@@ -1,45 +1,42 @@
 import { useState } from "react";
-import { Table, ConfigProvider, Space, Button, Select, Modal } from "antd";
-import { AiFillEye } from "react-icons/ai";
+import { Table, ConfigProvider, Space, Button, Modal } from "antd";
 import { FaEye } from "react-icons/fa";
-import { useGetAllMessageQuery } from "../../../redux/features/message/message";
+import moment from "moment";  // Import moment.js
+import { useGetAllMessageQuery, useUpdateMessageMutation } from "../../../redux/features/message/message";
 
 const Message = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
 
-  const {data} = useGetAllMessageQuery();
+
+
+
+  const { data } = useGetAllMessageQuery();
   const alldata = data?.data?.attributes || [];
-  
 
-  const dataSource = [
-    {
-      key: "1",
-      sl: "01",
-      userName: "Bashar",
-      email: "info@gmail.com",
-      phone: "089999******",
-      time: "11 April, 2025, 10AM",
-      userImage: "https://i.ibb.co/bjzn3zKW/Rectangle-3.png",
-      message:
-        "Hi, I'd like to exchange this dress.I'd like to exchange this dress.I'd like to exchange this dress.",
-    },
-    {
-      key: "2",
-      sl: "02",
-      userName: "Bashar",
-      email: "info@gmail.com",
-      phone: "089999******",
-      time: "11 April, 2025, 10AM",
-      userImage: "https://i.ibb.co/bjzn3zKW/Rectangle-3.png",
-      message:
-        "Hi, I'd like to exchange this dress.I'd like to exchange this dress.I'd like to exchange this dress.",
-    },
-    // Add more rows as needed...
-  ];
+  // Mapping the API data to the dataSource for the table
+  const dataSource = alldata.map((message, index) => ({
+    key: message._id,
+    sl: (index + 1).toString().padStart(2, "0"),
+    userName: message.name,
+    email: message.email,
+    phone: message.phone,
+    time: moment(message.createdAt).format("YYYY-MM-DD"), 
+    userImage: message.userImage,
+    message: message.message,
+  }));
 
-  const handleFilterChange = (value) => {
-    setFilter(value);
+
+
+  const [UpdateMessage] = useUpdateMessageMutation();
+
+  const handleUpdate = async (id, data) => {
+    try {
+      await UpdateMessage({ id, data }).unwrap();
+      console.log("Message updated successfully!");
+    } catch (error) {
+      console.error("Error updating message:", error);
+    }
   };
 
   const showModal = (record) => {
@@ -65,13 +62,6 @@ const Message = () => {
       key: "userName",
       render: (_, record) => (
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-300">
-            <img
-              src={record.userImage}
-              alt={record.userName}
-              className="w-full h-full object-cover"
-            />
-          </div>
           <span className="font-medium">{record.userName}</span>
         </div>
       ),
@@ -98,7 +88,7 @@ const Message = () => {
           <Button
             onClick={() => showModal(record)}
             className="bg-[#48B1DB] text-white hover:bg-[#3399cc] border-none"
-            icon={<FaEye  size={20} />}
+            icon={<FaEye size={20} />}
             shape="circle"
           />
         </Space>
@@ -109,7 +99,7 @@ const Message = () => {
   return (
     <div className="w-full rounded-lg ">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="font-semibold text-xl">Message</h2>
+        <h2 className="font-semibold text-xl">Messages</h2>
       </div>
 
       <ConfigProvider
@@ -129,7 +119,7 @@ const Message = () => {
       >
         <Table
           columns={columns}
-          dataSource={dataSource}
+          dataSource={dataSource}  // Dynamically use the mapped data
           pagination={{
             pageSize: 9,
             showSizeChanger: false,
@@ -178,16 +168,9 @@ const Message = () => {
         {selectedMessage && (
           <>
             <div className="flex items-center gap-3 mb-4">
-              <img
-                src={selectedMessage.userImage}
-                alt={selectedMessage.userName}
-                className="w-10 h-10 rounded-full object-cover"
-              />
               <span className="font-medium">{selectedMessage.userName}</span>
             </div>
-            <p className="mb-4 whitespace-pre-wrap">
-              {selectedMessage.message}
-            </p>
+            <p className="mb-4 whitespace-pre-wrap">{selectedMessage.message}</p>
             <p className="mb-1">{selectedMessage.email}</p>
             <p className="mb-4">{selectedMessage.phone}</p>
           </>
