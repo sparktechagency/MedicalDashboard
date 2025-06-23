@@ -9,22 +9,23 @@ const PaymentRequest = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { data } = useGetPaymentRequestQuery();
-  const AllData = data?.data?.attributes;
+  const AllData = data?.data;
 
   const allProducts = AllData?.map((product) => ({
     ...product,
     id: product._id,
-    name: product.product.title,
+    name: product.author.name,
+    phone: product.author.phone,
     status: product.status,
     userName: product.author.name,
-    useImage: product.author.image,
-    price: product.product.price,
+    useImage: product.image,
+    price: product.amount,
     transactionId: product.transactionId,
     bidPrice: product.amount,
     timeAndDate: new Date(product.createdAt).toLocaleString(),
-    MainBalance: "$1000", // Static for demo; replace with actual data
-    WithdrawalBalance: "$900", // Static for demo; replace with actual data
-    AvailableBalance: "$100", // Static for demo; replace with actual data
+    MainBalance: `$${product.author.currentBalance}`,
+    WithdrawalBalance: `$${product.amount}`,
+    AvailableBalance: `$${product.availableAmount}`,
   })) || [];
 
   const showModal = (product) => {
@@ -37,24 +38,43 @@ const PaymentRequest = () => {
     setSelectedProduct(null);
   };
 
-  const handleApprove = () => {
-    // Implement approval logic (e.g., API call)
-    console.log("Approved:", selectedProduct);
-    handleCancel();
+  const handleApprove = async () => {
+    try {
+      await fetch(`/api/payouts/${selectedProduct.id}/approve`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer your-auth-token",
+        },
+      });
+      console.log("Approved:", selectedProduct);
+      handleCancel();
+    } catch (error) {
+      console.error("Error approving request:", error);
+    }
   };
 
-  const handleDecline = () => {
-    // Implement decline logic (e.g., API call)
-    console.log("Declined:", selectedProduct);
-    handleCancel();
+  const handleDecline = async () => {
+    try {
+      await fetch(`/api/payouts/${selectedProduct.id}/decline`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer your-auth-token",
+        },
+      });
+      console.log("Declined:", selectedProduct);
+      handleCancel();
+    } catch (error) {
+      console.error("Error declining request:", error);
+    }
   };
 
-  // Upload props for Ant Design Upload component
   const uploadProps = {
     name: "file",
-    action: "https://api.example.com/upload", // Replace with your upload endpoint
+    action: "https://your-actual-upload-endpoint.com/upload",
     headers: {
-      authorization: "authorization-text", // Replace with actual auth if needed
+      authorization: "Bearer your-auth-token",
     },
     onChange(info) {
       if (info.file.status === "done") {
@@ -73,7 +93,7 @@ const PaymentRequest = () => {
       render: (_, __, index) => index + 1,
     },
     {
-      title: "Seller  Name",
+      title: "Seller Name",
       key: "userInfo",
       render: (_, record) => (
         <div className="flex items-center space-x-2">
@@ -87,11 +107,10 @@ const PaymentRequest = () => {
         </div>
       ),
     },
-    
     {
-      title: "Product Name",
-      dataIndex: "name",
-      key: "name",
+      title: "Phone",
+      dataIndex: "phone",
+      key: "phone",
     },
     {
       title: "Main Balance",
@@ -153,7 +172,6 @@ const PaymentRequest = () => {
         </ConfigProvider>
       </div>
 
-      {/* Withdrawal Request Modal */}
       <Modal
         title="Withdrawal Request"
         open={isModalVisible}
@@ -165,7 +183,6 @@ const PaymentRequest = () => {
       >
         {selectedProduct && (
           <div className="space-y-6 pt-4">
-            {/* Withdrawal Balance */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Withdrawal Balance
@@ -176,8 +193,6 @@ const PaymentRequest = () => {
                 </span>
               </div>
             </div>
-
-            {/* Balance Info Grid */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -200,8 +215,6 @@ const PaymentRequest = () => {
                 </div>
               </div>
             </div>
-
-            {/* Upload Photo */}
             <div>
               <Upload.Dragger {...uploadProps} className="bg-blue-50 rounded-lg">
                 <div className="flex flex-col items-center justify-center py-8">
@@ -212,8 +225,6 @@ const PaymentRequest = () => {
                 </div>
               </Upload.Dragger>
             </div>
-
-            {/* Action Buttons */}
             <div className="flex justify-end gap-3 pt-6">
               <Button
                 onClick={handleDecline}

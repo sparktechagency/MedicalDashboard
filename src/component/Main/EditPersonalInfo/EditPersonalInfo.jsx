@@ -13,9 +13,9 @@ import { imageBaseUrl } from "../../../config/imageBaseUrl";
 import { useTranslation } from "react-i18next";
 
 const EditInformation = () => {
-  const { data } = useGetUserQuery();
-  const user = data?.attributes?.user;
-  // console.log(user);
+  const { data, refetch,} = useGetUserQuery();
+  const user = data?.attributes?.user
+  console.log(user)
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
@@ -23,20 +23,16 @@ const EditInformation = () => {
 
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(
-    user?.profileImage ? `${imageBaseUrl}${user.profileImage}` : null
+    user?.image ? `${imageBaseUrl}/${user.image}` : null
   );
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (user) {
       form.setFieldsValue({
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        callingCode: user.callingCode || "",
-        phoneNumber: user.phoneNumber || "",
-        nidNumber: user.nidNumber || "",
-        dateOfBirth: user.dateOfBirth || "",
-        address: user.location?.locationName || "", // Assuming you want to display location as address
+        firstName: user.name || "",
+        phoneNumber: user.phone || "",
+        address: user.address || "", 
       });
     }
   }, [user, form]);
@@ -45,14 +41,14 @@ const EditInformation = () => {
     const file = event.target.files && event.target.files[0];
     if (file) {
       const newImageUrl = URL.createObjectURL(file);
-      setImageFile(file); // Store file to send on update
-      setImageUrl(newImageUrl); // Show preview
+      setImageFile(file); 
+      setImageUrl(newImageUrl); 
     }
   };
 
   const handleDivClick = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.click(); // Open file dialog
+      fileInputRef.current.click(); 
     }
   };
 
