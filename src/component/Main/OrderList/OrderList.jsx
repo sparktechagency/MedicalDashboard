@@ -18,6 +18,7 @@ const OrderList = () => {
       email: item.email,
       userImage: item.image, // Ensure this matches your API response field
       productName: item.product.title,
+      productId: item.product._id,
       bidPrice: `$${item.product.price}`, // Format price as currency
       bidTimeDate: moment(item.createdAt).format("DD MMM YYYY, hh:mm A"),
       status: item.status,
@@ -90,7 +91,7 @@ const OrderList = () => {
       key: "actions",
       render: (_, record) => (
         <Space size="middle">
-          <Link to={`/Orders/Details/${record.key}`}>
+          <Link to={`/Orders/Details/${record.productId}`}>
             <Button
               className="bg-[#48B1DB] text-white"
               icon={<AiFillEye size={20} />}

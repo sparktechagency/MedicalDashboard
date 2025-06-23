@@ -11,7 +11,7 @@ const Orders = baseApi.injectEndpoints({
     }),
     getOrdersSingle: builder.query({
       query: (id) => ({
-        url: `/product/single/${id}`,
+        url: `/bid/order/${id}`,
         method: "GET",
       }),
       providesTags: ["product"]
@@ -28,4 +28,6 @@ const Orders = baseApi.injectEndpoints({
 
 export const { 
   useGetOrdersAllQuery,
+  useGetOrdersSingleQuery,
+  useUpdateOrdersMutation
 } = Orders;

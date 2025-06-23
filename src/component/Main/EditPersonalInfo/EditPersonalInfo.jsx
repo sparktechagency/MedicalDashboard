@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 const EditInformation = () => {
   const { data, refetch,} = useGetUserQuery();
   const user = data?.attributes?.user
-  console.log(user)
+  // console.log(user)
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
@@ -56,25 +56,23 @@ const EditInformation = () => {
     const formdata = new FormData();
 
     // Append the updated values with updated field names
-    formdata.append("first_name", values.firstName);  // Changed field name
+    formdata.append("name", values.firstName);  // Changed field name
     // formdata.append("last_name", values.lastName);    // Changed field name
-    formdata.append("phone_number", values.phoneNumber); // Changed field name
+    formdata.append("phone", values.phoneNumber); // Changed field name
     formdata.append("address", values.address);
 
     // Add image if updated
     if (imageFile) {
-      formdata.append("profileImage", imageFile);  // Changed field name
+      formdata.append("image", imageFile);  // Changed field name
     }
 
     try {
       const response = await updateProfileInfo(formdata);
       console.log(response);
-      if (response.error) {
-        toast.error(response.error.data.message);
-      }
       if (response.data) {
         toast.success("Profile updated successfully!");
         navigate("/personal-info");
+        refetch();
       }
     } catch (error) {
       console.error("Error updating profile:", error);
