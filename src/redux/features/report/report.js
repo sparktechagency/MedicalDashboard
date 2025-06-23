@@ -11,7 +11,7 @@ const Report = baseApi.injectEndpoints({
     }),
     updateReport: builder.mutation({
       query: (data) => ({
-        url: "/info/all-reports",
+        url: "//report/delete/",
         method: "POST",
         body: data,
       }),
@@ -29,7 +29,7 @@ const Report = baseApi.injectEndpoints({
 
     deleteReport: builder.mutation({
       query: (id) => ({
-        url: `/report/${id}`,
+        url: `/report/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["report"],

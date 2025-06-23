@@ -5,7 +5,7 @@ import moment from "moment";
 import { Link } from "react-router-dom"; // ✅ Make sure you import this
 
 const Reports = () => {
-  const { data, isLoading } = useGetAllReportQuery(); // Optional loading state
+  const { data, isLoading,  } = useGetAllReportQuery(); 
   const allData = data?.data?.attributes || [];
 
   // ✅ Map your data into Ant Design Table format
@@ -17,6 +17,7 @@ const Reports = () => {
     type: item.title || "N/A",
     date: moment(item.createdAt).format("DD MMMM, YYYY"),
   }));
+
 
   // ✅ Define columns for Ant Table
   const columns = [
@@ -30,7 +31,7 @@ const Reports = () => {
       key: "actions",
       render: (_, record) => (
         <Space size="middle">
-          <Link to={`/reports/${record.key}`}>
+          <Link to={`/Reports/${record.key}`}>
             <InfoCircleOutlined style={{ fontSize: "18px", cursor: "pointer" }} />
           </Link>
         </Space>

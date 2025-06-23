@@ -1,38 +1,28 @@
-
-import React, { useState } from "react";
+import { useState } from "react";
 import { Modal, Space, Table, ConfigProvider } from "antd";
 import { FaEye } from "react-icons/fa";
+import { useGetAllEarningsQuery } from "../../../redux/features/Earnings/Earnings";
+import { imageBaseUrl } from "../../../config/imageBaseUrl";  // Make sure this is correctly set
 
 const Earnings = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const { data } = useGetAllEarningsQuery();
+  const AllData = data?.data?.attributes;
 
-  // Example dataSource with user image and user name
-  const dataSource = [
-    {
-      key: "1",
-      sl: "01",
-      productName: "GE Vivid S70 Ultrasound Machine",
-      category: "Diagnostic Equipment",
-      price: "$200",
-      bidPrice: "$210",
-      timeAndDate: "11 Oct 24, 11:10 PM",
-      useImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png",
-      userName: "John Doe",
-    },
-    {
-      key: "2",
-      sl: "02",
-      productName: "GE Vivid S70 Ultrasound Machine",
-      category: "Diagnostic Equipment",
-      price: "$200",
-      bidPrice: "$210",
-      timeAndDate: "11 Oct 24, 11:10 PM",
-      useImage: "https://i.ibb.co/0C5x0zk/Ellipse-1232.png",
-      userName: "Jane Smith",
-    },
-    // Add more items here
-  ];
+  const allProducts = AllData?.map((product) => ({
+    ...product,
+    id: product._id,
+    name: product.product.title,
+    image: product.product.images?.[0],
+    status: product.status,
+    userName: product.author.name,
+    useImage: product.author.image,
+    price: product.product.price,
+    transactionId: product.transactionId,
+    bidPrice: product.amount,
+    timeAndDate: new Date(product.createdAt).toLocaleString(),
+  })) || [];
 
   const showModal = (product) => {
     setSelectedProduct(product);
@@ -49,6 +39,7 @@ const Earnings = () => {
       title: "#SL",
       dataIndex: "sl",
       key: "sl",
+      render: (_, __, index) => index + 1,
     },
     {
       title: "User Info",
@@ -57,7 +48,7 @@ const Earnings = () => {
         <div className="flex items-center space-x-2">
           <img
             className="w-8 h-8"
-            src={record.useImage}
+            src={record.useImage ? `${imageBaseUrl}/${record.useImage}` : "default-image-path.jpg"}
             alt="User Image"
             style={{ borderRadius: "50%" }}
           />
@@ -66,36 +57,26 @@ const Earnings = () => {
       ),
     },
     {
-      title: "Product Name",
-      dataIndex: "productName",
-      key: "productName",
+      title: "Transaction ID",
+      dataIndex: "transactionId",
+      key: "transactionId",
     },
     {
-      title: "Category",
-      dataIndex: "category",
-      key: "category",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-    },
-    {
-      title: "Bid Price",
+      title: "Amount",
       dataIndex: "bidPrice",
       key: "bidPrice",
     },
     {
-      title: "Time & Date",
-      dataIndex: "timeAndDate",
-      key: "timeAndDate",
+      title: "Product Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <FaEye 
+          <FaEye
             onClick={() => showModal(record)}
             style={{ fontSize: "18px", cursor: "pointer" }}
           />
@@ -125,7 +106,7 @@ const Earnings = () => {
         >
           <Table
             columns={columns}
-            dataSource={dataSource}
+            dataSource={allProducts}
             pagination={{
               pageSize: 10,
               position: ["bottomRight"],
@@ -149,11 +130,7 @@ const Earnings = () => {
           <div className="p-5">
             <div className="flex justify-between py-3 border-t-2 border-gray-400">
               <p>Product Name :</p>
-              <p>{selectedProduct?.productName || "N/A"}</p>
-            </div>
-            <div className="flex justify-between py-3 border-t-2 border-gray-400">
-              <p>Category:</p>
-              <p>{selectedProduct?.category || "N/A"}</p>
+              <p>{selectedProduct?.name || "N/A"}</p>
             </div>
             <div className="flex justify-between py-3 border-t-2 border-gray-400">
               <p>Price :</p>
@@ -171,6 +148,7 @@ const Earnings = () => {
               <p>User Name:</p>
               <p>{selectedProduct?.userName || "N/A"}</p>
             </div>
+             <img src={selectedProduct?.image ? `${imageBaseUrl}/${selectedProduct.image}` : "default-image-path.jpg"} className="w-full h-40" alt="image" />
           </div>
         </div>
       </Modal>
