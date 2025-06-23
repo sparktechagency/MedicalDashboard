@@ -37,6 +37,8 @@ import SellerAgreement from "../page/SellerAgreement/SellerAgreement";
 import EditSellerAgreement from "../page/EditSellerAgreement/EditSellerAgreement";
 import BitPage from "../page/bitPage/bitPage";
 import OrderListPage from "../page/OrderListPage/OrderListPage";
+import OrdersDetailsPage from "../page/OrdersDetailsPage/OrdersDetailsPage";
+import PaymentRequestPage from "../page/PaymentRequestPage/PaymentRequestPage";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +65,14 @@ const router = createBrowserRouter([
       {
         path: "Orders",
         element: <OrderListPage />,
+      },
+      {
+        path: "Orders/Details/:id",
+        element: <OrdersDetailsPage />,
+      },
+      {
+        path: "PaymentRequest",
+        element: <PaymentRequestPage />,
       },
       {
         path: "personal-info",

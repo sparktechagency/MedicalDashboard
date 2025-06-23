@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { logoutUser } from "../../../redux/features/auth/authSlice";
 import LogoImage from "../../../assets/auth/Logo.png";
 import { useState } from "react";
-import { FaRegUserCircle } from "react-icons/fa";
+import { FaCcMastercard, FaRegUserCircle } from "react-icons/fa";
 import { TbMessageReport } from "react-icons/tb";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { FaRegMessage, FaUsersBetweenLines, FaUsersRectangle } from "react-icons/fa6";
@@ -32,6 +32,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     { path: "/users", label: "Users", icon: <FaRegUserCircle className="size-8" /> },
     { path: "/Vendorlist", label: "Seller", icon: <FaUsersBetweenLines className="size-8" /> },
     { path: "/Earnings", label: "Earnings", icon: <RiMoneyDollarCircleLine className="size-8" /> },
+    { path: "/PaymentRequest", label: "Payment Request", icon: <FaCcMastercard  className="size-8" /> },
     { path: "/Reports", label: "Reports", icon: <TbMessageReport className="size-8" /> },
     { path: "/Message", label: "Message", icon: <FaRegMessage  className="size-7" /> },
     { path: "/settings", label: "Settings", icon: <IoSettingsOutline className="size-8" /> },
@@ -60,10 +61,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     <>
       {/* Desktop Sidebar */}
       <div className="hidden md:flex flex-col w-[320px] h-screen bg-gradient-to-b from-[#F5F9FA] to-[#48b1dbd3] fixed">
-        <div className="flex justify-center items-center pt-5">
+        <div className="flex justify-center items-center pt-4">
           <img src={LogoImage} alt="logo" className="w-[128px] h-[128px] rounded-md" />
         </div>
-        <div className="border border-[#91C5DF] my-7"></div>
+        <div className="border border-[#91C5DF] my-5"></div>
         <div className="flex flex-col flex-grow justify-between">
           <ul className="w-[70%] mx-auto flex flex-col gap-3">{renderLinks()}</ul>
           <button
