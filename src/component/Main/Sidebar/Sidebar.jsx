@@ -12,6 +12,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { TbMessageReport } from "react-icons/tb";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { FaRegMessage, FaUsersBetweenLines, FaUsersRectangle } from "react-icons/fa6";
+import { TiShoppingCart } from "react-icons/ti";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     { path: "/", label: "Dashboard", icon: <LuLayoutDashboard className="size-8" /> },
     { path: "/vendorRequest", label: "Product Request", icon: <FaUsersRectangle className="size-8" /> },
     { path: "/UploadProduct", label: "Upload Product", icon: <LuPackageOpen className="size-8" /> },
+    { path: "/Orders", label: "Orders", icon: <TiShoppingCart className="size-8" /> },
     { path: "/users", label: "Users", icon: <FaRegUserCircle className="size-8" /> },
     { path: "/Vendorlist", label: "Seller", icon: <FaUsersBetweenLines className="size-8" /> },
     { path: "/Earnings", label: "Earnings", icon: <RiMoneyDollarCircleLine className="size-8" /> },
@@ -59,7 +61,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
       {/* Desktop Sidebar */}
       <div className="hidden md:flex flex-col w-[320px] h-screen bg-gradient-to-b from-[#F5F9FA] to-[#48b1dbd3] fixed">
         <div className="flex justify-center items-center pt-5">
-          <img src={LogoImage} alt="logo" className="w-[148px] h-[148px] rounded-md" />
+          <img src={LogoImage} alt="logo" className="w-[128px] h-[128px] rounded-md" />
         </div>
         <div className="border border-[#91C5DF] my-7"></div>
         <div className="flex flex-col flex-grow justify-between">

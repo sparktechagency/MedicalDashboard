@@ -36,6 +36,7 @@ import ReportsDetailPage from "../page/ReportsDetailPage/ReportsDetailPage";
 import SellerAgreement from "../page/SellerAgreement/SellerAgreement";
 import EditSellerAgreement from "../page/EditSellerAgreement/EditSellerAgreement";
 import BitPage from "../page/bitPage/bitPage";
+import OrderListPage from "../page/OrderListPage/OrderListPage";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "/users/:id",
         element: <UserDetailsPage />,
+      },
+      {
+        path: "Orders",
+        element: <OrderListPage />,
       },
       {
         path: "personal-info",
