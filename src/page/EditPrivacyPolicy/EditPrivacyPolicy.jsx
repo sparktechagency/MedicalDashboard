@@ -9,52 +9,58 @@ import {
   useUpdatePrivacyPolicyMutation,
 } from "../../redux/features/PrivacyPolicy/PrivacyPolicyApi";
 
+// Simple function to strip HTML tags
+const stripHtmlTags = (html) => {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent || div.innerText || "";
+};
+
 const EditPrivacyPolicy = () => {
   const { data } = useGetAllPrivacyPolicyQuery();
   const [updatePrivacyPolicy] = useUpdatePrivacyPolicyMutation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [content, setContent] = useState(data?.data?.attributes[0]?.content);
+  const [content, setContent] = useState("");
+
   useEffect(() => {
-    if (data?.data?.attributes[0]?.content) {
-      setContent(data?.data?.attributes[0]?.content);
+    if (data?.data?.attributes.content) {
+      // Strip HTML tags from the content
+      const plainText = stripHtmlTags(data?.data?.attributes.content);
+      setContent(plainText);
     }
   }, [data]);
 
   const handleSubmit = async () => {
-    // Extract plain text from Quill content
-    const plainText = content.replace(/<[^>]*>/g, "").trim(); // Remove HTML tags and trim whitespace
-
-    console.log(plainText);
     // Ensure content is not empty
-    if (!plainText) {
+    if (!content) {
       message.error("Content cannot be empty.");
       return;
     }
 
     try {
       // Prepare the update payload
-      const updatedContent = { content: plainText };
+      const updatedContent = { content };
 
       // Send the update request
       const result = await updatePrivacyPolicy(updatedContent);
 
       // Provide feedback to the user
       if (result) {
-        message.success("About Us section updated successfully!");
+        message.success("Privacy Policy updated successfully!");
         navigate("/settings/privacy-policy");
       }
     } catch (error) {
-      message.error("Failed to update About Us section.");
+      message.error("Failed to update Privacy Policy.");
     }
   };
 
   return (
-    <section className="w-full h-full min-h-screen ">
+    <section className="w-full h-full min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center py-5">
         <div className="flex gap-4 items-center">
-          <Link to="/settings">
+          <Link to="/settings/privacy-policy">
             <IoChevronBack className="text-2xl" />
           </Link>
           <h1 className="text-2xl font-semibold">Edit Privacy Policy</h1>
@@ -67,24 +73,24 @@ const EditPrivacyPolicy = () => {
           <Form form={form} layout="vertical" onFinish={handleSubmit}>
             <Form.Item name="content" initialValue={content}>
               <ReactQuill
-                defaultValue={content}
+                value={content} // Use value instead of defaultValue for controlled input
                 onChange={(value) => setContent(value)}
                 modules={{
                   toolbar: [
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }], // Header dropdown
-                    [{ font: [] }], // Font options
-                    [{ list: "ordered" }, { list: "bullet" }], // Ordered and bullet lists
-                    ["bold", "italic", "underline", "strike"], // Formatting options
-                    [{ align: [] }], // Text alignment
-                    [{ color: [] }, { background: [] }], // Color and background
-                    ["blockquote", "code-block"], // Blockquote and code block
-                    ["link", "image", "video"], // Link, image, and video upload
-                    [{ script: "sub" }, { script: "super" }], // Subscript and superscript
-                    [{ indent: "-1" }, { indent: "+1" }], // Indent
-                    ["clean"], // Remove formatting
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                    [{ font: [] }],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{ align: [] }],
+                    [{ color: [] }, { background: [] }],
+                    ["blockquote", "code-block"],
+                    ["link", "image", "video"],
+                    [{ script: "sub" }, { script: "super" }],
+                    [{ indent: "-1" }, { indent: "+1" }],
+                    ["clean"],
                   ],
                 }}
-                style={{ height: "300px" }} // Set the increased height
+                style={{ height: "300px" }}
               />
             </Form.Item>
 

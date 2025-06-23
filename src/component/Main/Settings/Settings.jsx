@@ -127,6 +127,10 @@ const Settings = () => {
       path: "UserAgreement",
     },
     {
+      title: `${t("Seller Agreement")}`,
+      path: "SellerAgreement",
+    },
+    {
       title: `${t("About us")}`,
       path: "about-us",
     },

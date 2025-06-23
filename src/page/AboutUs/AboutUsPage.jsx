@@ -2,14 +2,14 @@ import { IoChevronBack } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { TbEdit } from "react-icons/tb";
 import CustomButton from "../../utils/CustomButton";
-import { useGetAllAboutsQuery } from "../../redux/features/abouts/aboutsApi";
 import { useTranslation } from "react-i18next";
-
+import { useGetAllAboutsQuery } from "../../redux/features/abouts/aboutsApi";
+import decodeHtmlEntities from "../../utils/decodeHtmlEntities";
 
 const AboutUsPage = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const { data, error, isLoading } = useGetAllAboutsQuery();
-  console.log(data?.data?.attributes[0]?.content)
+  const aboutData = data?.data?.attributes?.content;
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -22,7 +22,7 @@ const AboutUsPage = () => {
   return (
     <section className="w-full h-full min-h-screen">
       <div className="flex justify-between items-center py-5">
-        <div className="flex  items-center">
+        <div className="flex items-center">
           <Link to="/settings">
             <IoChevronBack className="text-xl" />
           </Link>
@@ -35,14 +35,17 @@ const AboutUsPage = () => {
           </CustomButton>
         </Link>
       </div>
-      {/* Your privacy policy content goes here */}
-      <div>
-        <h1  className="px-5 text-xl">
-        {data?.data?.attributes[0]?.content
-          ? data?.data?.attributes[0]?.content
-              .replace(/<br\s*\/?>/gi, "\n")  // Replace <br> with newlines
-              .replace(/<\/?[^>]+(>|$)/g, "")  // Remove other HTML tags
-          : ""}
+
+      {/* Render About Us content */}
+      <div className="px-5">
+        <h1 className="text-xl">
+          {aboutData ? (
+            <span
+              dangerouslySetInnerHTML={{ __html: decodeHtmlEntities(aboutData) }}
+            />
+          ) : (
+            ""
+          )}
         </h1>
       </div>
     </section>
@@ -50,3 +53,4 @@ const AboutUsPage = () => {
 };
 
 export default AboutUsPage;
+

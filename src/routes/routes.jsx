@@ -33,6 +33,8 @@ import AllCategoryPage from "../page/AllCategoryPage/AllCategoryPage";
 import MessagePage from "../page/MessagePage/MessagePage";
 import ProductCategory from "../component/Main/ProductCategory/ProductCategory";
 import ReportsDetailPage from "../page/ReportsDetailPage/ReportsDetailPage";
+import SellerAgreement from "../page/SellerAgreement/SellerAgreement";
+import EditSellerAgreement from "../page/EditSellerAgreement/EditSellerAgreement";
 
 const router = createBrowserRouter([
   {
@@ -131,6 +133,14 @@ const router = createBrowserRouter([
       {
         path: "/settings/UserAgreement/:id",
         element: <EditUserAgreement />,
+      },
+      {
+        path: "/settings/SellerAgreement",
+        element: <SellerAgreement />,
+      },
+      {
+        path: "/settings/SellerAgreement/:id",
+        element: <EditSellerAgreement  />,
       },
       {
         path: "settings/privacy-policy",

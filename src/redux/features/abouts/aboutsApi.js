@@ -4,7 +4,7 @@ const aboutsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     UpdateAbouts: builder.mutation({
       query: (data) => ({
-        url: "/info/about-us",
+        url: "/setting/about_us",
         method: "POST",
         body: data,
       }),
@@ -12,7 +12,7 @@ const aboutsApi = baseApi.injectEndpoints({
     }),
     getAllAbouts: builder.query({
       query: () => ({
-        url: "/info/about-us",
+        url: "/setting/about_us",
         method: "GET",
       }),
       providesTags:["settings"],
@@ -21,6 +21,6 @@ const aboutsApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useUpdateAboutsMutation,
   useGetAllAboutsQuery,
+  useUpdateAboutsMutation
 } = aboutsApi;

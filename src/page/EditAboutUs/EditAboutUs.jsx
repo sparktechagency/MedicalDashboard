@@ -1,31 +1,32 @@
 import { IoChevronBack } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, message } from "antd";
-import ReactQuill from "react-quill"; // Import React Quill
-import "react-quill/dist/quill.snow.css"; // Import Quill styles
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { useEffect, useState } from "react";
-import {  useGetAllAboutsQuery, useUpdateAboutsMutation,} from "../../redux/features/abouts/aboutsApi";
+import { useGetAllAboutsQuery, useUpdateAboutsMutation } from "../../redux/features/abouts/aboutsApi";
+import decodeHtmlEntities from "../../utils/decodeHtmlEntities";
 
 const EditAboutUs = () => {
   const { data } = useGetAllAboutsQuery();
+  const aboutData = data?.data?.attributes?.content;
 
-  const [update ] = useUpdateAboutsMutation();
-
+  const [update] = useUpdateAboutsMutation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [content, setContent] = useState(data?.data?.attributes[0]?.content); 
+  const [content, setContent] = useState('');
+
   useEffect(() => {
-    if (data?.data?.attributes[0]?.content) {
-      setContent(data?.data?.attributes[0]?.content);
+    // Ensure aboutData is decoded only once
+    if (aboutData) {
+      setContent(decodeHtmlEntities(aboutData)); // Decode once when aboutData is loaded
     }
   }, [data]);
 
-
   const handleSubmit = async () => {
-    // Extract plain text from Quill content
-const plainText = content.replace(/<[^>]*>/g, "").trim(); // Remove HTML tags and trim whitespace
+    const plainText = content;
 
-    console.log(plainText)
+    console.log(plainText);
     // Ensure content is not empty
     if (!plainText) {
       message.error("Content cannot be empty.");
@@ -35,7 +36,7 @@ const plainText = content.replace(/<[^>]*>/g, "").trim(); // Remove HTML tags an
     try {
       // Prepare the update payload
       const updatedContent = { content: plainText };
-      
+
       // Send the update request
       const result = await update(updatedContent);
 
@@ -50,11 +51,11 @@ const plainText = content.replace(/<[^>]*>/g, "").trim(); // Remove HTML tags an
   };
 
   return (
-    <section className="w-full h-full min-h-screen ">
+    <section className="w-full h-full min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center py-5">
         <div className="flex gap-4 items-center">
-          <Link to="/settings">
+          <Link to="/settings/about-us">
             <IoChevronBack className="text-2xl" />
           </Link>
           <h1 className="text-2xl font-semibold">Edit About Us</h1>
@@ -64,28 +65,29 @@ const plainText = content.replace(/<[^>]*>/g, "").trim(); // Remove HTML tags an
       {/* Form Section */}
       <div className="w-full p-6 rounded-lg shadow-md bg-[#E5F6FD]">
         {content && (
-          <Form form={form} layout="vertical" onFinish={handleSubmit}>
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
             <Form.Item name="content" initialValue={content}>
-              <ReactQuill
-                defaultValue={content}
-                onChange={(value) => setContent(value)}
-                modules={{
-                  toolbar: [
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }], // Header dropdown
-                    [{ font: [] }], // Font options
-                    [{ list: "ordered" }, { list: "bullet" }], // Ordered and bullet lists
-                    ["bold", "italic", "underline", "strike"], // Formatting options
-                    [{ align: [] }], // Text alignment
-                    [{ color: [] }, { background: [] }], // Color and background
-                    ["blockquote", "code-block"], // Blockquote and code block
-                    ["link", "image", "video"], // Link, image, and video upload
-                    [{ script: "sub" }, { script: "super" }], // Subscript and superscript
-                    [{ indent: "-1" }, { indent: "+1" }], // Indent
-                    ["clean"], // Remove formatting
-                  ],
-                }}
-                style={{ height: "300px" }} // Set the increased height
-              />
+            <ReactQuill
+  defaultValue={content}
+  onChange={(value) => setContent(value)}
+  modules={{
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["bold", "italic", "underline", "strike"],
+      [{ align: [] }],
+      [{ color: [] }, { background: [] }],
+      ["blockquote", "code-block"],
+      ["link", "image", "video"],
+      [{ script: "sub" }, { script: "super" }],
+      [{ indent: "-1" }, { indent: "+1" }],
+      ["clean"],
+    ],
+  }}
+  style={{ height: "300px", textAlign: "left" }}
+/>
+
             </Form.Item>
 
             {/* Update Button */}
@@ -106,3 +108,7 @@ const plainText = content.replace(/<[^>]*>/g, "").trim(); // Remove HTML tags an
 };
 
 export default EditAboutUs;
+
+
+
+

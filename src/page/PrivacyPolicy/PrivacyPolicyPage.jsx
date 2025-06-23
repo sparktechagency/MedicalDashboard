@@ -5,12 +5,13 @@ import CustomButton from "../../utils/CustomButton";
 
 import { useTranslation } from "react-i18next";
 import { useGetAllPrivacyPolicyQuery } from "../../redux/features/PrivacyPolicy/PrivacyPolicyApi";
+import decodeHtmlEntities from "../../utils/decodeHtmlEntities";
 
 
 const PrivacyPolicyPage = () => {
   const {t} = useTranslation()
   const { data, error, isLoading } = useGetAllPrivacyPolicyQuery();
-  console.log(data?.data?.attributes[0]?.content)
+  console.log(data?.data?.attributes?.content)
     
   if (isLoading) {
     return <div>Loading...</div>;
@@ -38,11 +39,13 @@ const PrivacyPolicyPage = () => {
       </div>
       <div>
         <h1  className="px-5 text-xl text-black">
-          {data?.data?.attributes[0]?.content
-          ? data?.data?.attributes[0]?.content
-              .replace(/<br\s*\/?>/gi, "\n")  // Replace <br> with newlines
-              .replace(/<\/?[^>]+(>|$)/g, "")  // Remove other HTML tags
-          : ""}
+        {data?.data?.attributes?.content ? (
+            <span
+              dangerouslySetInnerHTML={{ __html: decodeHtmlEntities(data?.data?.attributes?.content) }}
+            />
+          ) : (
+            ""
+          )}
         </h1>
       </div>
     </section>

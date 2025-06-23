@@ -7,12 +7,13 @@ import CustomButton from "../../utils/CustomButton";
 
 import { useTranslation } from "react-i18next";
 import { useGetAllTermConditionQuery } from "../../redux/features/TermsConditions/TermsConditionsApi";
+import decodeHtmlEntities from "../../utils/decodeHtmlEntities";
 
 
 const TermsconditionPage = () => {
    const {t} = useTranslation()
   const { data, error, isLoading } = useGetAllTermConditionQuery();
-  console.log(data?.data?.attributes[0]?.content)
+  console.log(data?.data?.attributes?.content)
   // console.log(data)
   if (isLoading) {
     return <div>Loading...</div>;
@@ -41,11 +42,13 @@ const TermsconditionPage = () => {
       {/* Your privacy policy content goes here */}
       <div>
         <h1 className="px-5 text-xl">
-          {data?.data?.attributes[0]?.content
-          ? data?.data?.attributes[0]?.content
-              .replace(/<br\s*\/?>/gi, "\n")  // Replace <br> with newlines
-              .replace(/<\/?[^>]+(>|$)/g, "")  // Remove other HTML tags
-          : ""}
+        {data?.data?.attributes?.content ? (
+            <span
+              dangerouslySetInnerHTML={{ __html: decodeHtmlEntities(data?.data?.attributes?.content) }}
+            />
+          ) : (
+            ""
+          )}
         </h1>
       </div>
     </section>

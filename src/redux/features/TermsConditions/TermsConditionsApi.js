@@ -4,7 +4,7 @@ const TermsConditionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     UpdateTermCondition: builder.mutation({
       query: (data) => ({
-        url: "/info/terms-condition",
+        url: "/setting/terms",
         method: "POST",
         body: data,
       }),
@@ -13,7 +13,7 @@ const TermsConditionsApi = baseApi.injectEndpoints({
     
     getAllTermCondition: builder.query({
       query: () => ({
-        url: "/info/terms-condition",
+        url: "/setting/terms",
         method: "GET",
       }),
       providesTags:["settings"],
