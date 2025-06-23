@@ -3,10 +3,11 @@ import { TbEdit } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import CustomButton from "../../utils/CustomButton";
 
-import { useGetAllPrivacyPolicyQuery } from "../../redux/features/PrivacyPolicy/PrivacyPolicyApi";
+import decodeHtmlEntities from "../../utils/decodeHtmlEntities";
+import { useGetAllUserAgreementQuery } from "../../redux/features/Agreement/Agreement";
 
 const UserAgreement = () => {
-  const { data, error, isLoading } = useGetAllPrivacyPolicyQuery();
+  const { data, error, isLoading } = useGetAllUserAgreementQuery();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -16,13 +17,6 @@ const UserAgreement = () => {
     return <div>Error loading privacy policy</div>;
   }
 
-  const content = data?.data?.attributes?.[0]?.content || "";
-
-  const formatContent = (htmlString) => {
-    return htmlString
-      .replace(/<br\s*\/?>/gi, "\n")
-      .replace(/<\/?[^>]+(>|$)/g, "");
-  };
 
   return (
     <section className="w-full h-full min-h-screen">
@@ -41,7 +35,13 @@ const UserAgreement = () => {
         </Link>
       </div>
       <div className="px-5 whitespace-pre-wrap text-black text-xl">
-        {formatContent(content)}
+      {data?.data?.attributes?.content ? (
+            <span
+              dangerouslySetInnerHTML={{ __html: decodeHtmlEntities(data?.data?.attributes?.content) }}
+            />
+          ) : (
+            ""
+          )}
       </div>
     </section>
   );
