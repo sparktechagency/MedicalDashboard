@@ -17,6 +17,20 @@ const ProductManagementApi = baseApi.injectEndpoints({
       }),
       providesTags: ["product"]
     }),
+    getBitAll: builder.query({
+      query: (id) => ({
+        url: `/bid/product/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["product"]
+    }),
+    getProductAll: builder.query({
+      query: () => ({
+        url: `/product/self`,
+        method: "GET",
+      }),
+      providesTags: ["product"]
+    }),
     getProductSingle: builder.query({
       query: (id) => ({
         url: `/product/single/${id}`,
@@ -47,4 +61,5 @@ export const {
   useUpdateProductMutation,
   useDeleteProductMutation,
   useCreateProductMutation,
+  useGetBitAllQuery,
 } = ProductManagementApi;

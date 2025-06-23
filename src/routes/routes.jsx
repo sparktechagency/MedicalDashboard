@@ -35,6 +35,7 @@ import ProductCategory from "../component/Main/ProductCategory/ProductCategory";
 import ReportsDetailPage from "../page/ReportsDetailPage/ReportsDetailPage";
 import SellerAgreement from "../page/SellerAgreement/SellerAgreement";
 import EditSellerAgreement from "../page/EditSellerAgreement/EditSellerAgreement";
+import BitPage from "../page/bitPage/bitPage";
 
 const router = createBrowserRouter([
   {
@@ -93,6 +94,10 @@ const router = createBrowserRouter([
       {
         path: "AllProducts",
         element: <AllProductsPage />,
+      },
+      {
+        path: "AllProducts/bit/:id",
+        element: <BitPage />,
       },
       {
         path: "AllCategory",

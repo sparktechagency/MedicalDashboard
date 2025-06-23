@@ -63,7 +63,7 @@ const AllProducts = () => {
       <div>
         {currentProducts.map((product) => (
           <Link
-            to="/BidderList"
+            to={`/AllProducts/bit/${product._id}`}
             key={product.id}
             className="flex items-center justify-between border-[#91C5DF] bg-gray-50 border my-5 rounded-md p-1"
           >
