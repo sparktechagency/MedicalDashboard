@@ -5,16 +5,9 @@ import { useGetOrdersSingleQuery } from '../../../redux/features/Orders/Orders';
 
 const OrdersDetails = () => {
     const { id } = useParams();
-    const { data, isLoading, error } = useGetOrdersSingleQuery(id);
+    const { data,  } = useGetOrdersSingleQuery(id);
 
-    // Return loading or error states
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error loading data</div>;
-    }
+    
 
     // Extract order details from the response data
     const order = data?.data?.attributes;
