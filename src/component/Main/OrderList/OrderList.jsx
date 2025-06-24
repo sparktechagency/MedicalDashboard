@@ -10,16 +10,15 @@ const OrderList = () => {
   const { data } = useGetOrdersAllQuery();
   console.log(data);
 
-  const dataSource =
-    data?.data?.attributes.map((item, index) => ({
+  const dataSource = data?.data?.attributes.map((item, index) => ({
       key: item._id,
       sl: String(index + 1),
       bidderName: item.name,
       email: item.email,
-      userImage: item.image, // Ensure this matches your API response field
+      userImage: item.image, 
       productName: item.product.title,
       productId: item.product._id,
-      bidPrice: `$${item.product.price}`, // Format price as currency
+      bidPrice: `$${item.product.price}`, 
       bidTimeDate: moment(item.createdAt).format("DD MMM YYYY, hh:mm A"),
       status: item.status,
     })) || [];
@@ -38,10 +37,10 @@ const OrderList = () => {
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-300">
             <img
-              src={record.userImage ? `${imageBaseUrl}/${record.userImage}` : `${imageBaseUrl}/default-avatar.png`} // Corrected image logic
+              src={record.userImage ? `${imageBaseUrl}/${record.userImage}` : `${imageBaseUrl}/default-avatar.png`} 
               alt={record.bidderName}
               className="w-full h-full object-cover"
-              onError={(e) => { e.target.src = `${imageBaseUrl}/default-avatar.png`; }} // Fallback if image fails to load
+              onError={(e) => { e.target.src = `${imageBaseUrl}/default-avatar.png`; }} 
             />
           </div>
           <span className="font-medium">{record.bidderName}</span>
@@ -108,7 +107,6 @@ const OrderList = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold text-xl">Order list</h2>
       </div>
-
       {/* User Table */}
       <ConfigProvider
         theme={{

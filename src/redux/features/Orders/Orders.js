@@ -16,6 +16,18 @@ const Orders = baseApi.injectEndpoints({
       }),
       providesTags: ["product"]
     }),
+    deliveryProduct: builder.mutation({
+      query: (id) => ({
+        url: `/bid/shipped/${id}`,
+        method: "POST",
+      }),
+    }),
+    DeliveryNow: builder.mutation({
+      query: (id) => ({
+        url: `/bid/delivery/${id}`,
+        method: "POST",
+      }),
+    }),
     UpdateOrders: builder.mutation({
       query: ({ id, data }) => ({
         url: `/product/${id}`,
@@ -29,5 +41,7 @@ const Orders = baseApi.injectEndpoints({
 export const { 
   useGetOrdersAllQuery,
   useGetOrdersSingleQuery,
-  useUpdateOrdersMutation
+  useUpdateOrdersMutation,
+  useDeliveryProductMutation,
+  useDeliveryNowMutation,
 } = Orders;

@@ -1,16 +1,19 @@
 import React from 'react';
 import { ArrowLeft } from "lucide-react";
 import { useParams } from 'react-router-dom';
-import { useGetOrdersSingleQuery } from '../../../redux/features/Orders/Orders';
+import { useDeliveryNowMutation, useDeliveryProductMutation, useGetOrdersSingleQuery } from '../../../redux/features/Orders/Orders';
+import { imageBaseUrl } from '../../../config/imageBaseUrl';
+import moment from 'moment';
+import { message } from 'antd'; 
 
 const OrdersDetails = () => {
     const { id } = useParams();
-    const { data,  } = useGetOrdersSingleQuery(id);
-
-    
+    const { data, } = useGetOrdersSingleQuery(id);
+    console.log(data);
 
     // Extract order details from the response data
     const order = data?.data?.attributes;
+    const bidId = order?.bid?._id;
 
     // Ensure the necessary data exists
     const bid = order?.bid || {};
@@ -22,11 +25,42 @@ const OrdersDetails = () => {
         return `$${amount}`;
     };
 
+    const [sendingproduct] = useDeliveryProductMutation();
+    const [deliveryNow] = useDeliveryNowMutation();
+
+    // Handle sending product
+    const handleSendingProduct = async(id) => {
+      try {
+        const res = await sendingproduct(id);
+        console.log(res);
+        if(res?.data?.code === 200){
+          message.success(res?.data?.message);
+        }
+      } catch (error) {
+        console.error(error);
+        message.error("Something went wrong while sending the product");
+      }
+    }
+
+    // Handle delivery now
+    const handleDeliveryNow = async(id) => {
+      try {
+        const res = await deliveryNow(id);
+        console.log(res);
+        if(res?.data?.code === 200){
+          message.success(res?.data?.message);
+        }
+      } catch (error) {
+        console.error(error);
+        message.error("Something went wrong while processing delivery");
+      }
+    }
+
     return (
-        <div className="min-h-screen bg-gray-50 p-4">
-            <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-sm">
+        <div className="min-h-screen bg-gray-50 p-4 mt-5 rounded-md">
+            <div className="max-w-2xl mx-auto bg-white rounded-lg">
                 {/* Header */}
-                <div className="flex items-center gap-3 p-6 border-b border-gray-200">
+                <div className="flex items-center gap-3 p-6 ">
                     <button className="text-gray-400 hover:text-gray-600">
                         <ArrowLeft size={20} />
                     </button>
@@ -81,33 +115,18 @@ const OrdersDetails = () => {
                         </span>
                     </div>
 
-                    {/* Product Images */}
-                    <div className="flex flex-wrap gap-4 py-4 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Product Images</span>
-                        <div className="flex gap-2">
-                            {product?.images?.map((image, index) => (
-                                <img 
-                                    key={index}
-                                    src={`${imageBaseUrl}/${image}`}
-                                    alt={`Product Image ${index + 1}`}
-                                    className="w-20 h-20 object-cover rounded-lg"
-                                />
-                            ))}
-                        </div>
-                    </div>
-
                     {/* Bid Time & Date (raw date) */}
                     <div className="flex justify-between items-center py-4 border-b border-gray-100">
                         <span className="text-gray-600 font-medium">Bid Time & Date</span>
                         <span className="text-gray-900">
-                            {bid?.createdAt || 'N/A'}
+                           {bid?.createdAt ? moment(bid.createdAt).format('YYYY-MM-DD') : 'N/A'}
                         </span>
                     </div>
 
                     {/* Status */}
                     <div className="flex justify-between items-center py-4 border-b border-gray-100">
                         <span className="text-gray-600 font-medium">Status</span>
-                        <span className="text-gray-900">{order?.status || 'N/A'}</span>
+                        <span className="text-gray-900">{order?.bid?.status || 'N/A'}</span>
                     </div>
 
                     {/* Payment Status */}
@@ -123,12 +142,22 @@ const OrdersDetails = () => {
                     </div>
 
                     {/* Status Button */}
-                    <div className="pt-6 flex justify-end">
-                        <button 
+                    <div className="pt-6 flex justify-end space-x-4">
+                        {order?.bid?.status === 'progress' ? (
+                            <button
+                            onClick={() => handleSendingProduct(bidId)} // Correct invocation with arrow function
                             className="px-6 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white font-medium"
-                        >
-                            {order?.status === 'shipped' ? 'Product Shipped' : 'Product Not Shipped'}
-                        </button>
+                            >
+                             Sending Product
+                            </button>
+                        ) : order?.bid?.status === 'shipped' ? (
+                            <button
+                            onClick={() => handleDeliveryNow(bidId)} // Correct invocation with arrow function
+                            className="px-6 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white font-medium"
+                            >
+                             Delivery Now
+                            </button>
+                        ) : null}
                     </div>
                 </div>
             </div>
