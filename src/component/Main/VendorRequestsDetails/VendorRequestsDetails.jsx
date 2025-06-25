@@ -1,4 +1,4 @@
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useGetProductSinglesQuery, useUpdateApproveProductMutation, useUpdatedeclineProductMutation } from "../../../redux/features/VendorRequests/VendorRequests";
 import moment from "moment/moment";
 import { imageBaseUrl } from "../../../config/imageBaseUrl";
