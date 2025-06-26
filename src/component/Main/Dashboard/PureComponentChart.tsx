@@ -10,15 +10,7 @@ const PureComponentChart = () => {
   const fallbackData = dataget?.map(item => ({
     name: item.monthName,
     uv: item.monthlyIncome
-  })) || [
-    { name: '10:30 AM', uv: 1000 },
-    { name: '11:00 AM', uv: 2000 },
-    { name: '11:30 AM', uv: 1800 },
-    { name: '12:00 PM', uv: 2780 },
-    { name: '12:30 PM', uv: 2890 },
-    { name: '01:00 PM', uv: 3390 },
-    { name: '01:30 PM', uv: 2490 },
-  ];
+  })) || [];
 
   // Use the transformed API data as chart data
   const chartData = fallbackData;

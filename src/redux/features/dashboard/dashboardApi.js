@@ -16,7 +16,11 @@ const dashboardApi = baseApi.injectEndpoints({
       }),
       transformResponse: (response) => response?.data?.attributes,
     }),
+    
   }),
 });
 
-export const { useGetDashboardStatusQuery, useGetTransactionRatioQuery } = dashboardApi;
+export const {
+ useGetDashboardStatusQuery,
+ useGetTransactionRatioQuery
+} = dashboardApi;

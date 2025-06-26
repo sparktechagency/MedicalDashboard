@@ -154,7 +154,7 @@ const EditProducts = () => {
                   defaultValue={productData?.category?._id}
                   className="w-full border border-[#48B1DB] p-3 rounded-md"
                 >
-                  <option value="">{productData?.category?.name}</option>
+                  <option value={productData?.category?._id}>{productData?.category?.name}</option>
                   {categories.map((cat) => (
                     <option key={cat._id} value={cat._id}>
                       {cat.name}
