@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Modal, Space, Table, ConfigProvider } from "antd";
 import { FaEye } from "react-icons/fa";
-import { useGetAllEarningsQuery } from "../../../redux/features/Earnings/Earnings";
 import { imageBaseUrl } from "../../../config/imageBaseUrl";  // Make sure this is correctly set
+import { useGetAllEarningsQuery } from "../../../redux/features/Earnings/Earnings";
 
 const Earnings = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);

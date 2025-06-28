@@ -12,7 +12,7 @@ const RecentTransactions = () => {
   // Fetch data from the Redux API
   const { data } = useGetRecentUserQuery();
   // console.log(data?.attributes?.results); // Log data for debugging
-  const dataSource = data?.attributes?.results || [];
+  const dataSource = (data?.attributes?.results || []).slice(0, 6);
   // console.log(dataSource); // Log dataSource for debugging
 
   // Show modal with user details

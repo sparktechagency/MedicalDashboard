@@ -45,7 +45,7 @@ const EditSellerAgreement = () => {
       // Provide feedback to the user
       if (result) {
         message.success("Seller agreement updated successfully!");
-        navigate("/settings/UserAgreement");
+        navigate("/settings/SellerAgreement");
       }
     } catch (error) {
       message.error("Failed to update user agreement");
