@@ -44,9 +44,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      // <AdminRoutes>
-      <MainLayout />
-      // </AdminRoutes>
+      <AdminRoutes>
+          <MainLayout />
+      </AdminRoutes>
     ),
     errorElement: <h1>Error</h1>,
     children: [

@@ -7,6 +7,6 @@ export default defineConfig({
   server: {
     allowedHosts: ["maniknew8080.sobhoy.com", "maniknew8080.sobhoy.com"],
     host: "0.0.0.0",
-    port: 4000,
+    port: 8080,
   },
 });
