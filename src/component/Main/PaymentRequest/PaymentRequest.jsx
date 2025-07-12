@@ -1,17 +1,21 @@
 import { useState } from "react";
-import { Modal, Space, Table, ConfigProvider, Button, Upload } from "antd";
+import { Modal, Space, Table, ConfigProvider, Button, Upload, message } from "antd";
 import { FaEye } from "react-icons/fa";
 import { CameraOutlined } from "@ant-design/icons";
-import { imageBaseUrl } from "../../../config/imageBaseUrl"; 
-import { useGetPaymentRequestQuery } from "../../../redux/features/PaymentRequest/PaymentRequest";
+import { imageBaseUrl } from "../../../config/imageBaseUrl";
+import { useGetPaymentRequestQuery, useMakeApprovePaymentMutation } from "../../../redux/features/PaymentRequest/PaymentRequest";
 
 const PaymentRequest = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [fileList, setFileList] = useState([]);
+  
   const { data } = useGetPaymentRequestQuery();
-  const AllData = data?.data;
+  const allData = data?.data;
+  const [makeApprovePayment] = useMakeApprovePaymentMutation();
 
-  const allProducts = AllData?.map((product) => ({
+  const allProducts = allData?.map((product) => ({
     ...product,
     id: product._id,
     name: product.author.name,
@@ -36,52 +40,81 @@ const PaymentRequest = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
     setSelectedProduct(null);
+    setUploadedFile(null);
+    setFileList([]);
   };
 
   const handleApprove = async () => {
+    const status = "approve";
+    const formData = new FormData();
+    formData.append("status", status);
+    
+    if (uploadedFile) {
+      formData.append("image", uploadedFile);
+    }
+    const { id } = selectedProduct;
     try {
-      await fetch(`/api/payouts/${selectedProduct.id}/approve`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer your-auth-token",
-        },
-      });
-      console.log("Approved:", selectedProduct);
+      const res = await makeApprovePayment({ id, data: formData }).unwrap();
+      console.log("Approval response:", res);
+      message.success("Payment request approved successfully!");
       handleCancel();
     } catch (error) {
-      console.error("Error approving request:", error);
+      console.error("Error approving request:", error?.data?.message);
+      const errorMessage = error?.data?.message || "Failed to approve payment request";
+      message.error(errorMessage);
     }
   };
 
   const handleDecline = async () => {
+    const status = "decline";
+    const formData = new FormData();
+    formData.append("status", status);
+    if (uploadedFile) {
+      formData.append("image", uploadedFile);
+    }
+    const { id } = selectedProduct;
     try {
-      await fetch(`/api/payouts/${selectedProduct.id}/decline`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer your-auth-token",
-        },
-      });
-      console.log("Declined:", selectedProduct);
+      const res = await makeApprovePayment({ id, data: formData }).unwrap();
+      console.log("Decline response:", res);
+      message.success("Payment request declined successfully!");
       handleCancel();
     } catch (error) {
-      console.error("Error declining request:", error);
+      console.error("Error declining request:", error?.data?.message);
+      const errorMessage = error?.data?.message || "Failed to decline payment request";
+      message.error(errorMessage);
     }
   };
 
   const uploadProps = {
     name: "file",
-    action: "https://your-actual-upload-endpoint.com/upload",
-    headers: {
-      authorization: "Bearer your-auth-token",
-    },
-    onChange(info) {
-      if (info.file.status === "done") {
-        console.log(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        console.log(`${info.file.name} file upload failed.`);
+    multiple: false,
+    fileList: fileList,
+    beforeUpload: (file) => {
+      // Check file type
+      const isImage = file.type.startsWith('image/');
+      if (!isImage) {
+        message.error('You can only upload image files!');
+        return false;
       }
+      
+      // Check file size (limit to 5MB)
+      const isLessThan5M = file.size / 1024 / 1024 < 5;
+      if (!isLessThan5M) {
+        message.error('Image must be smaller than 5MB!');
+        return false;
+      }
+      
+      setUploadedFile(file);
+      setFileList([file]);
+      return false; // Prevent automatic upload
+    },
+    onRemove: () => {
+      setUploadedFile(null);
+      setFileList([]);
+    },
+    onChange: (info) => {
+      console.log("Upload info:", info);
+      setFileList(info.fileList);
     },
   };
 
@@ -167,7 +200,7 @@ const PaymentRequest = () => {
               pageSize: 10,
               position: ["bottomRight"],
             }}
-            scroll={{ x: 1000 }}
+            scroll={{ x: 800 }}
           />
         </ConfigProvider>
       </div>
@@ -193,6 +226,7 @@ const PaymentRequest = () => {
                 </span>
               </div>
             </div>
+            
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -215,16 +249,26 @@ const PaymentRequest = () => {
                 </div>
               </div>
             </div>
+            
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Upload Receipt/Proof (Optional)
+              </label>
               <Upload.Dragger {...uploadProps} className="bg-blue-50 rounded-lg">
                 <div className="flex flex-col items-center justify-center py-8">
                   <CameraOutlined className="text-3xl text-blue-500 mb-3" />
                   <span className="text-blue-600 font-medium text-base">
-                    Upload Photo
+                    Click or drag file to upload
+                  </span>
+                  <span className="text-gray-500 text-sm mt-2">
+                    Support: JPG, PNG,  
                   </span>
                 </div>
               </Upload.Dragger>
             </div>
+            
+            
+            
             <div className="flex justify-end gap-3 pt-6">
               <Button
                 onClick={handleDecline}

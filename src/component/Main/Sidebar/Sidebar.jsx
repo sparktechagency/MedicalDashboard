@@ -60,12 +60,12 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex flex-col w-[320px] h-screen bg-gradient-to-b from-[#F5F9FA] to-[#48b1dbd3] fixed">
+      <div className="hidden md:flex flex-col w-[320px] h-screen bg-gradient-to-b from-[#F5F9FA] to-[#48b1dbd3] fixed overflow-auto ">
         <div className="flex justify-center items-center pt-4">
           <img src={LogoImage} alt="logo" className="w-[128px] h-[128px] rounded-md" />
         </div>
         <div className="border border-[#91C5DF] my-5"></div>
-        <div className="flex flex-col flex-grow justify-between">
+        <div className="flex flex-col flex-grow justify-between overflow-auto">
           <ul className="w-[70%] mx-auto flex flex-col gap-3">{renderLinks()}</ul>
           <button
             onClick={() => setShowModal(true)}

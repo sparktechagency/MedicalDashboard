@@ -9,16 +9,11 @@ const PaymentRequest = baseApi.injectEndpoints({
       }),
       providesTags: ["product"]
     }),
-    UpdatedeclinePayment: builder.mutation({
-      query: (id) => ({
-        url: `/product/decline/${id}`,
-        method: "PATCH",
-      }),
-    }),
-    UpdateApprovePayment: builder.mutation({
-      query: (id) => ({
-        url: `/product/approve/${id}`,
-        method: "PATCH",
+    MakeApprovePayment: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/payout/status/${id}`,
+        method: "POST",
+        body: data,
       }),
     }),
   }),
@@ -26,4 +21,5 @@ const PaymentRequest = baseApi.injectEndpoints({
 
 export const { 
   useGetPaymentRequestQuery,
+  useMakeApprovePaymentMutation,
 } = PaymentRequest;
