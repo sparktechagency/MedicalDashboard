@@ -67,7 +67,7 @@ const UserDetails = () => {
       <div className="flex items-center space-x-6 mb-10">
         <div className="w-24 h-24 rounded-full overflow-hidden border border-gray-300">
           <img
-              src={`${imageBaseUrl}/${data?.data?.attributes?.author?.image}`}
+              src={`${data?.data?.attributes?.author?.image}`}
               alt={data?.data?.attributes?.author?.name} 
               className="w-full h-full object-cover"
           />

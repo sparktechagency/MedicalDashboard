@@ -23,7 +23,7 @@ const EditInformation = () => {
 
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(
-    user?.image ? `${imageBaseUrl}/${user.image}` : null
+    user?.image ? `${user.image}` : null
   );
   const fileInputRef = useRef(null);
 

@@ -48,7 +48,7 @@ const Earnings = () => {
         <div className="flex items-center space-x-2">
           <img
             className="w-8 h-8"
-            src={record.useImage ? `${imageBaseUrl}/${record.useImage}` : "default-image-path.jpg"}
+            src={record.useImage ? `${record.useImage}` : "default-image-path.jpg"}
             alt="User Image"
             style={{ borderRadius: "50%" }}
           />
@@ -148,7 +148,7 @@ const Earnings = () => {
               <p>User Name:</p>
               <p>{selectedProduct?.userName || "N/A"}</p>
             </div>
-             <img src={selectedProduct?.image ? `${imageBaseUrl}/${selectedProduct.image}` : "default-image-path.jpg"} className="w-full h-40" alt="image" />
+             <img src={selectedProduct?.image ? `${selectedProduct.image}` : "default-image-path.jpg"} className="w-full h-40" alt="image" />
           </div>
         </div>
       </Modal>

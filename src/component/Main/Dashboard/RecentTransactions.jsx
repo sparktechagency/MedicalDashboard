@@ -41,7 +41,7 @@ const RecentTransactions = () => {
       render: (text, record) => (
         <div className="flex items-center">
           <img
-            src={record.image ? `${imageBaseUrl}/${record.image}` : `${image}`}
+            src={record.image ? `${record.image}` : `${image}`}
             alt="user"
             style={{
               width: "40px",
@@ -122,7 +122,7 @@ const RecentTransactions = () => {
           <p className="flex justify-between border-b border-gray-500 py-5 "><strong>Name:</strong> {selectedUser?.name || "N/A"}</p>
           <p className="py-5">
             <img 
-              src={selectedUser?.image ? `${imageBaseUrl}/${selectedUser.image}` : `${image}`}
+              src={selectedUser?.image ? `${selectedUser.image}` : `${image}`}
               alt="user" 
               className="w-40 h-40 object-cover rounded-lg"
             />

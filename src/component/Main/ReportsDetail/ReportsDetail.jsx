@@ -44,7 +44,7 @@ const ReportsDetail = () => {
       <div className="bg-[#50C5F3] text-white rounded-md flex justify-between items-center p-4 mb-6">
         <div className="flex items-start space-x-4">
           <img
-            src={`${imageBaseUrl}/${product?.images[0]}`}
+            src={`${product?.images[0]}`}
             alt="Product"
             className="w-12 h-12 rounded-md object-cover"
           />
@@ -67,7 +67,7 @@ const ReportsDetail = () => {
         <div className="flex flex-col space-y-4 border-b md:border-b-0 md:border-r border-[#E8D0B8] md:pr-4">
           <div className="flex items-center space-x-4">
             <img
-              src={`${imageBaseUrl}/${reporter?.image}`}
+              src={`${reporter?.image}`}
               alt="Reporter"
               className="w-20 h-20 rounded-full object-cover"
             />
@@ -90,7 +90,7 @@ const ReportsDetail = () => {
         <div className="flex flex-col space-y-4">
           <div className="flex items-center space-x-4">
             <img
-              src={`${imageBaseUrl}/${reportedUser?.image}`}
+              src={`${reportedUser?.image}`}
               alt="Reported User"
               className="w-20 h-20 rounded-full object-cover"
             />

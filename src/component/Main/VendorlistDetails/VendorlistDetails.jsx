@@ -15,7 +15,7 @@ const VendorlistDetails = () => {
 
   // User information populated with API author data
   const user = {
-    profileImage: author.image ? `${imageBaseUrl}/${author.image}` : "", // Empty string if image is not available
+    profileImage: author.image ? `${author.image}` : "", // Empty string if image is not available
     fullName: author.name || "", // Empty string if name is not available
     name: author.name || "", // Empty string if name is not available
     email: author.email || "", // Empty string if email is not available
@@ -49,7 +49,7 @@ const VendorlistDetails = () => {
       render: (text, record) => (
         <div className="flex items-center space-x-3">
           <img
-            src={`${imageBaseUrl}/${record.image}`}
+            src={`${record.image}`}
             alt={record.productName}
             className="w-16 h-12 rounded-md object-cover"
           />

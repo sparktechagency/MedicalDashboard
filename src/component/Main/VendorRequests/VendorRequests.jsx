@@ -38,7 +38,7 @@ const VendorRequest = () => {
               <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden aspect-square">
                 <img
                   src={
-                    record.images ? `${imageBaseUrl}/${record.images?.[0]}` : ""
+                    record.images ? `${record.images?.[0]}` : ""
                   }
                   alt={record.title}
                   className="w-full h-full object-cover"

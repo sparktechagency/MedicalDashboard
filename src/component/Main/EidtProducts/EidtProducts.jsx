@@ -29,7 +29,7 @@ const EditProducts = () => {
 
   useEffect(() => {
     if (productData?.images?.length) {
-      const urls = productData.images.map((img) => `${imageBaseUrl}/${img}`);
+      const urls = productData.images.map((img) => `${img}`);
       setProfileImages(urls);
       setExistingImageNames(productData.images);
     }

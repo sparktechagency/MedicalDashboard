@@ -43,7 +43,7 @@ const UserManagement = () => {
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-300">
             <img
-              src={`${imageBaseUrl}/${record.userImage}`}
+              src={`${record.userImage}`}
               alt={record.userName}
               className="w-full h-full object-cover"
             />

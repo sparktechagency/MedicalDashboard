@@ -40,7 +40,7 @@ const PersonalInformation = () => {
         <div className="rounded-lg flex justify-center items-center flex-col ">
   <img
     className="border size-32 rounded-full mx-auto"
-    src={user?.image ? `${imageBaseUrl}/${user?.image}` : '/path/to/default/image.jpg'}
+    src={user?.image ? `${user?.image}` : '/path/to/default/image.jpg'}
     alt="Profile"
   />
 </div>

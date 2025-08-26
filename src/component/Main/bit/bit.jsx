@@ -53,7 +53,7 @@ const Bit = () => {
         <div className="flex items-center space-x-2">
           <img
             className="w-8 h-8"
-            src={record.useImage ? `${imageBaseUrl}/${record.useImage}` : "default-image-path.jpg"}
+            src={record.useImage ? `${record.useImage}` : "default-image-path.jpg"}
             alt="User Image"
             style={{ borderRadius: "50%" }}
           />

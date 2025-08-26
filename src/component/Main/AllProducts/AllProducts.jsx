@@ -70,7 +70,7 @@ const AllProducts = () => {
             <div className="flex items-center space-x-4">
               <img
                 src={
-                  product.image ? `${imageBaseUrl}/${product.image}` : ""
+                  product.image ? `${product.image}` : ""
                 }
                 alt={product.name}
                 className="h-16 w-16 object-cover"

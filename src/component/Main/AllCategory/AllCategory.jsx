@@ -5,7 +5,7 @@ import {
   useDeleteCategoryMutation,
   useGetCategoryAllQuery,
 } from "../../../redux/features/Category/Category";
-import { imageBaseUrl } from "../../../config/imageBaseUrl";
+
 
 const AllCategory = () => {
   const { data, refetch } = useGetCategoryAllQuery(); // ✅ Include refetch
@@ -54,7 +54,7 @@ const AllCategory = () => {
           >
             <div className="flex items-center space-x-4">
               <img
-                src={product.image ? `${imageBaseUrl}/${product.image}` : ""}
+                src={product.image ? `${product.image}` : ""}
                 alt={product.name}
                 className="h-16 w-16 object-cover"
               />

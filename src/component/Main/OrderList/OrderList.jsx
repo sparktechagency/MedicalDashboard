@@ -37,10 +37,10 @@ const OrderList = () => {
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-300">
             <img
-              src={record.userImage ? `${imageBaseUrl}/${record.userImage}` : `${imageBaseUrl}/default-avatar.png`} 
+              src={record.userImage ? `${record.userImage}` : `default-avatar.png`} 
               alt={record.bidderName}
               className="w-full h-full object-cover"
-              onError={(e) => { e.target.src = `${imageBaseUrl}/default-avatar.png`; }} 
+              onError={(e) => { e.target.src = `default-avatar.png`; }} 
             />
           </div>
           <span className="font-medium">{record.bidderName}</span>

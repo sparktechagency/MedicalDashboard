@@ -49,7 +49,7 @@ const VendorRequestsDetails = () => {
             <div className="flex space-x-2 md:space-x-4 items-center">
               <div className="w-auto overflow-hidden cursor-pointer">
                 <img
-                  src={`${imageBaseUrl}/${product?.attributes?.author?.image}`}
+                  src={`${product?.attributes?.author?.image}`}
                   alt="Vendor"
                   className="w-16 h-16 md:w-24 md:h-24 rounded-full object-cover"
                 />
@@ -101,7 +101,7 @@ const VendorRequestsDetails = () => {
           {/* Right Image */}
           <div className="w-full md:w-[30%] flex justify-center md:justify-end">
             <img
-              src={`${imageBaseUrl}/${product?.attributes?.images?.[0]}`}
+              src={`${product?.attributes?.images?.[0]}`}
               alt="Product"
               className="max-w-full h-[300px] rounded-md"
             />

@@ -43,16 +43,16 @@ const Header = ({ toggleSidebar }) => {
         <img
           onClick={() => navigate("/personal-info")}
           src={
-            user?.profileImage
-              ? `${imageBaseUrl}${user?.profileImage}`
+            user?.image
+              ? `${user?.image}`
               : "/src/assets/user.png"
           }
           className="size-12 rounded-full cursor-pointer"
         />
         {/* Right Side */}
         <div className="text-white">
-          <div className="mr-2">Hisham</div>
-          <div className="text-sm">Admin</div>
+          <div className="text-sm">{user?.name}</div>
+          <div className="mr-2">{user?.role}</div>
         </div>
       </div>
     </div>

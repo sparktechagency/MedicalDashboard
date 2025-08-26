@@ -72,7 +72,7 @@ const OrdersDetails = () => {
                     <div className="flex items-center gap-4">
                         <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center overflow-hidden">
                             <img 
-                                src={author?.image ? `${imageBaseUrl}/${author.image}` : `${imageBaseUrl}/default-avatar.png`}
+                                src={author?.image ? `${author.image}` : `default-avatar.png`}
                                 alt={author?.name}
                                 className="w-full h-full object-cover"
                             />

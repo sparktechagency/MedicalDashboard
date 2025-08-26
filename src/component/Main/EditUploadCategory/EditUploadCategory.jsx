@@ -111,7 +111,7 @@ const EditUploadCategory = () => {
         <div className="mb-4 relative w-28 h-28 rounded overflow-hidden">
           <img
             ref={previewRef}
-            src={`${imageBaseUrl}/${category?.image}` || ""}  
+            src={`${category?.image}` || ""}  
             alt="Preview"
             className="object-cover w-full h-full"
           />
