@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     //allowedHosts: ["maniknew8080.sobhoy.com", "maniknew8080.sobhoy.com"],
-    allowedHosts: ["admin.mstauctionsolutions.com/"]
+    allowedHosts: ["admin.mstauctionsolutions.com/"],
     host: "0.0.0.0",
     port: 8080,
   },
